@@ -8,3 +8,5 @@
 *.zip
 *.rar
 *.doc
+*.in
+*.out
