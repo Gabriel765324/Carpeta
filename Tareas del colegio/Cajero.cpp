@@ -22,7 +22,9 @@ int main(){
     while(1){
         system("pause");
         system("cls");
-        cout<<"Elija una opción.\n1. Retirar\n2. Depositar\n3. Consultar\n4. Salir\n";
+        if(a == "2222") cout<<"Gabriel";
+        else cout<<"Cruz";
+        cout<<", elija una opción.\n1. Retirar\n2. Depositar\n3. Consultar\n4. Salir\n";
         long long o;
         cin>>o;
         long long d;

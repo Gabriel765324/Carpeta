@@ -12,6 +12,6 @@ int main(){
     cout<<"Ingrese un valor.\n";
     long long n;
     cin>>n;
-    cout<<"La suma de las "<<n<<" primeras potencias de 2 es "<<p(2LL, n + 1LL) - 1LL<<".";
+    cout<<"La suma de las "<<n<<" primeras potencias de 2 es "<<p(2LL, n + 1LL) - 2LL<<".";
     return 0;
-} //La fórmula 2 + 2^2 + ... + 2^n = 2^(n + 1) - 1 es útil, pero usar potenciación binaria deja correr el código aun más rápido.
+} //La fórmula 2 + 2^2 + ... + 2^n = 2^(n + 1) - 2 es útil, pero usar potenciación binaria deja correr el código aun más rápido.
