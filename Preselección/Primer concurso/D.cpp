@@ -1,5 +1,89 @@
-//:(
+//No se compliquen la vida con coordenadas polares.
 #include "bits/stdc++.h"
+using namespace std;
+struct Punto{
+    long long x, y, z;
+};
+Punto Resta(Punto a, Punto b){
+    Punto c;
+    c.x = b.x - a.x;
+    c.y = b.y - a.y;
+    c.z = b.z - a.z;
+    return c;
+}
+Punto Suma(Punto a, Punto b){
+    Punto c;
+    c.x = b.x + a.x;
+    c.y = b.y + a.y;
+    c.z = b.z + a.z;
+    return c;
+}
+Punto Operar(Punto a, string o){
+    if(o == "+z") a.z++;
+    if(o == "+y") a.y++;
+    if(o == "-z") a.z--;
+    if(o == "-y") a.y--;
+    if(o != "No") a.x--;
+    return a;
+}
+Punto Rotar(Punto a, string o){
+    if(o == "No") return a;
+    long long x = a.x;
+    long long y = a.y;
+    long long z = a.z;
+    if(o == "+z"){
+        a.x = -z;
+        a.z = x;
+    }
+    if(o == "+y"){
+        a.x = -y;
+        a.y = x;
+    }
+    if(o == "-z"){
+        a.x = z;
+        a.z = -x;
+    }
+    if(o == "-y"){
+        a.x = y;
+        a.y = -x;
+    }
+    return a;
+}
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    long long n;
+    while(cin>>n){
+        if(n == 0) break;
+        vector<string> Operaciones(n - 1);
+        Punto Siguiente;
+        Siguiente.x = n;
+        Siguiente.y = 0;
+        Siguiente.z = -0;
+        Punto Actual = Siguiente;
+        for(long long i = 0; i < n - 1; i++){
+            cin>>Operaciones[i];
+            Actual = Suma(Rotar(Resta(Siguiente, Actual), Operaciones[i]), Operar(Siguiente, Operaciones[i]));
+            Siguiente.x--;
+        }
+        Punto Primero = Actual;
+        Siguiente.x = n - 1;
+        Actual = Siguiente;
+        for(long long i = 1; i < n - 1; i++){
+            Actual = Suma(Rotar(Resta(Siguiente, Actual), Operaciones[i]), Operar(Siguiente, Operaciones[i]));
+            Siguiente.x--;
+        }
+        if(Primero.x > Actual.x) cout<<"+x";
+        if(Primero.x < Actual.x) cout<<"-x";
+        if(Primero.y > Actual.y) cout<<"+y";
+        if(Primero.y < Actual.y) cout<<"-y";
+        if(Primero.z > Actual.z) cout<<"+z";
+        if(Primero.z < Actual.z) cout<<"-z";
+        cout<<"\n";
+    }
+    return 0;
+}
+/*#include "bits/stdc++.h"
 using namespace std;
 struct Punto_i{
     long long x, y, z;
@@ -28,7 +112,7 @@ double Distancia(Punto_i a, Punto_i b){
     long long _3 = a.z - b.z;
     return sqrt(_1 * _1 + _2 * _2 + _3 * _3);
 }
-/*Punto_i Nuevo_punto_i(Punto_i a, Punto_p b){
+Punto_i Nuevo_punto_i(Punto_i a, Punto_p b){
     Punto_i Retorno;
     Retorno.x = Redondear(b.m * sin(b.o2) * cos(b.o1)) + a.x;;
     Retorno.y = Redondear(b.m * sin(b.o2) * sin(b.o1)) + a.y;
@@ -42,7 +126,7 @@ Punto_p Nuevo_punto_p(Punto_i a, Punto_i b){
     Retorno.o1 = Atan(y, x);
     Retorno.o2 = Acos(z, Retorno.m);
     return Retorno;
-}*/
+}
 Punto_i Nuevo_punto_i(Punto_i a, Punto_p b, double o3){
     Punto_i Retorno;
     if(b.o1 - pi / 2 < 0.000000000000001 or b.o1 - 3 * pi / 2 < 0.000000000000001){
@@ -101,7 +185,7 @@ int main(){
             double o1 = Ahora.o1;
             double o2 = Ahora.o2;
             double o3 = Atan((double)(Actual.y - Siguiente.y), (double)(Actual.z - Siguiente.z));
-            /*if(Operaciones[i] == "+z"){
+            if(Operaciones[i] == "+z"){
                 Ahora.o1 = pi - o3;
                 Ahora.o2 -= pi / 2;
                 ns.z++;
@@ -120,7 +204,7 @@ int main(){
                 Ahora.o1 = o1 - pi / 2;
                 Ahora.o2 = o3;
                 ns.y--;
-            }*/
+            }
            if(Operaciones[i] == "+z"){
                 Ahora.o1 = pi - o3;
                 Ahora.o2 += pi / 2;
@@ -163,7 +247,7 @@ int main(){
             double o1 = Ahora.o1;
             double o2 = Ahora.o2;
             double o3 = Atan((double)(Actual.y - Siguiente.y), (double)(Actual.z - Siguiente.z));
-            /*if(Operaciones[i] == "+z"){
+            if(Operaciones[i] == "+z"){
                 Ahora.o1 = pi - o3;
                 Ahora.o2 -= pi / 2;
                 ns.z++;
@@ -182,7 +266,7 @@ int main(){
                 Ahora.o1 = o1 - pi / 2;
                 Ahora.o2 = o3;
                 ns.y--;
-            }*/
+            }
             if(Operaciones[i] == "+z"){
                 Ahora.o1 = pi - o3;
                 Ahora.o2 += pi / 2;
@@ -221,4 +305,4 @@ int main(){
         cout<<"\n";
     }
     return 0;
-}
+}*/
