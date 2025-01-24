@@ -1,29 +1,56 @@
 #include "bits/stdc++.h"
 using namespace std;
-int main(){
-    ios_base::sync_with_stdio(0);
-    cin.tie(0);
-    long long t;
-    cin>>t;
-    while(t--){
-        long long i = 2, d = 999, Mejor = 2, c = 7;
-        while(c--){
-            long long _1 = (d - i + 1) / 3 + i, _2 = 2 * (d - i + 1) / 3 + i, r;
-            cout<<"? "<<_1<<" "<<_2<<endl;
-            cin>>r;
-            if(r == -1) return 0;
-            if(r == (_1 + 1) * (_2 + 1)){
-                Mejor = _1;
-                d = _1 - 1;
-            } else if(r == _1 * (_2 + 1)){
-                Mejor = _2;
-                i = _1 + 1;
-                d = _2 - 1;
-            } else if(r == _1 * _2){
-                i = _2 + 1;
-            }
-        }
-        cout<<"! "<<Mejor<<endl;
+vector<long long> r;
+long long Buscar(long long a){
+    if(r[a] == a) return a;
+    return r[a] = Buscar(r[a]);
+}
+bool Unir(long long a, long long b){
+    a = Buscar(a);
+    b = Buscar(b);
+    if(a != b){
+        r[b] = a;
+        return 1;
     }
     return 0;
 }
+int main(){
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    long long n;
+    cin>>n;
+    for(long long i = 0; i < n; i++) r.push_back(i);
+    deque< pair<long, long> > Calles_malas;
+    for(long long i = 0; i < n - 1; i++){
+        long long a, b;
+        cin>>a>>b;
+        a--;
+        b--;
+        if(!Unir(a, b)) Calles_malas.push_back({a + 1, b + 1});
+    }
+    map<long long, long long> Uniones;
+    set<long long> Representantes;
+    for(long long i = 0; i < n; i++){
+        r[i] = Buscar(r[i]);
+        Uniones[r[i]] = i + 1;
+        Representantes.insert(r[i]);
+    }
+    cout<<Calles_malas.size()<<"\n";
+    while(Representantes.size() > 1){
+        auto E = Representantes.begin();
+        auto e = Representantes.begin();
+        e++;
+        cout<<Calles_malas[0].first<<" "<<Calles_malas[0].second<<" "<<Uniones[*E]<<" "<<Uniones[*e]<<"\n";
+        Calles_malas.pop_front();
+        Representantes.erase(E);
+    }
+    return 0;
+}
+/*
+6
+1 2
+2 3
+3 1
+4 3
+4 5
+*/

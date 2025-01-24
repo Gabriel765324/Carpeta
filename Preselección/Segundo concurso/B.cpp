@@ -1,65 +1,40 @@
 #include "bits/stdc++.h"
 using namespace std;
-vector<long long> _rbol, Propagar;
-long long Consulta(long long i, long long d, long long p, long long I, long long D){
-    long long r = d - i + 1;
-    if(Propagar[p] != 0){
-        _rbol[p] += Propagar[p] * r;
-        if(p * 2 < _rbol.size()){
-            Propagar[p * 2] += Propagar[p];
-        }
-        if(p * 2 + 1 < _rbol.size()){
-            Propagar[p * 2 + 1] += Propagar[p];
-        }
-        Propagar[p] = 0;
-    }
-    if(i >= I and d <= D) return _rbol[p];
-    if(i > D or d < I) return -0;
-    long long P = (i + d) / 2;
-    return Consulta(i, P, p * 2, I, D) + Consulta(P + 1, d, p * 2 + 1, I, D);
+vector<long long> r, t;
+long long Buscar(long long a){
+    if(r[a] == a) return a;
+    return r[a] = Buscar(r[a]);
 }
-void Actualizar(long long i, long long d, long long p, long long I, long long D){
-    long long r = d - i + 1;
-    if(Propagar[p] != 0){
-        _rbol[p] += Propagar[p] * r;
-        if(p * 2 < _rbol.size()){
-            Propagar[p * 2] += Propagar[p];
-        }
-        if(p * 2 + 1 < _rbol.size()){
-            Propagar[p * 2 + 1] += Propagar[p];
-        }
-        Propagar[p] = 0;
+void Unir(long long a, long long b){
+    a = Buscar(a);
+    b = Buscar(b);
+    if(a != b){
+        if(t[a] < t[b]) swap(a, b);
+        t[a] += t[b];
+        r[b] = a;
     }
-    if(i >= I and d <= D){
-        Propagar[p]++;
-        return;
-    }
-    if(i > D or d < I) return;
-    long long P = (i + d) / 2;
-    Actualizar(i, P, p * 2, I, D);
-    Actualizar(P + 1, d, p * 2 + 1, I, D);
 }
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    long long n, h, Mejor = 2222222222222222, Veces = 0;
-    cin>>n>>h;
-    _rbol.assign((h + 22) * 4, 0);
-    Propagar.assign((h + 22) * 4, 0);
-    h--;
+    long long n, m;
+    cin>>n>>m;
     for(long long i = 0; i < n; i++){
-        long long a;
-        cin>>a;
-        if(i % 2 == 0) Actualizar(0, h, 1, 0, a - 1);
-        else Actualizar(0, h, 1, h - a + 1, h);
+        r.push_back(i);
+        t.push_back(1);
     }
-    for(long long i = 0; i <= h; i++){
-        long long Romper = Consulta(0, h, 1, i, i);
-        if(Romper < Mejor){
-            Mejor = Romper;
-            Veces = 1;
-        } else if(Mejor == Romper) Veces++;
+    vector<long long> Amiguitos(n, 1);
+    while(m--){
+        long long a, b;
+        cin>>a>>b;
+        a--;
+        b--;
+        Unir(a, b);
+        Amiguitos[a]++;
+        Amiguitos[b]++;
     }
-    cout<<Mejor<<" "<<Veces;
+    bool Razonable = 1;
+    for(long long i = 0; i < n and Razonable; i++) if(t[Buscar(i)] > Amiguitos[i]) Razonable = 0;
+    cout<<((Razonable) ? "YES" : "NO");
     return 0;
 }
