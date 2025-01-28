@@ -1,9 +1,8 @@
 #include "bits/stdc++.h"
 using namespace std;
 int main(){
-    //ios_base::sync_with_stdio(0);
-    //cin.tie(0);
-    long long n;
+    //vector<long long> p = {4, 1, 0, 2, 3};
+    long long n/* = p.size()*/;
     cin>>n;
     if(n == 1){
         cout<<"! 0"<<endl;
@@ -14,29 +13,29 @@ int main(){
     for(long long i = 0; i < n; i++){
         if(i == 0){
             cout<<"? 2 0 1"<<endl;
-            long long r;
+            long long r/* = (long long)(p[0] > p[1])*/;
             cin>>r;
-            if(r == 1) a = {1, 0};
-            else a = {0, 1};
+            //cout<<r<<endl;
+            if(r == 0) a = {0, 1};
+            else a = {1, 0};
             i++;
         } else {
-            long long Izquierda = 0, Derecha = a.size() - 1, Mejor = 0;
-            while(1){
-                long long Promedio = (Izquierda + Derecha) / 2;
-                cout<<"? 2 "<<a[Promedio]<<" "<<i<<endl;
-                long long r;
-                cin>>r;
-                if(Promedio == 0 and r == 1){
-                    Mejor = -1;
-                    break;
-                }
-                if(r == 0){
-                    Izquierda = Promedio + 1;
-                    Mejor = Promedio;
-                } else Derecha = Promedio - 1;
-                if(Izquierda >= Derecha + 1) break;
+            vector<long long> c = {a[0], i};
+            for(long long j = 1; j < a.size(); j++){
+                c.push_back(a[j]);
+                c.push_back(a[0]);
+                c.push_back(i);
             }
-            a.insert(a.begin() + Mejor + 1, i);
+            cout<<"? "<<c.size()<<" ";
+            for(auto E: c) cout<<E<<" ";
+            cout<<endl;
+            long long r = 0;
+            cin>>r;
+            /*for(long long j = 0; j < c.size() - 1; j++) r += (long long)(p[c[j]] > p[c[j + 1]]);
+            cout<<r<<endl;*/
+            r -= i - 1;
+            if(r == i) a.insert(a.begin(), i);
+            else a.insert(a.begin() + r + 1, i);
         }
         /*for(auto E: a) cerr<<E<<" ";
         cerr<<"\n";*/
@@ -46,7 +45,7 @@ int main(){
     }
     cout<<"! ";
     for(auto E: Respuesta) cout<<E<<" ";
-    cout<<endl;
+    cout<<endl/*<<((Respuesta != p) ? "Mal." : "Bien.")<<endl*/;
     //long long Inversos = 0;
     /*for(long long i = 2; i <= n; i++){
         cout<<"? "<<i<<" ";
