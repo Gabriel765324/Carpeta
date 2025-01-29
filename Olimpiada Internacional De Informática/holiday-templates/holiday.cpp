@@ -41,17 +41,80 @@ long long int findMaxAttraction(int N, int start, int d, int attraction[]){
     Inicio = start;
     Tiempo = d;
     for(long long i = 0; i < n; i++) Atracciones.push_back(attraction[i]);
-    if(n == 1){
-        if(Tiempo > 0) return Atracciones[0];
-        else return 0;
+    if(Tiempo == 0) return 0;
+    if(n == 1) return Atracciones[0];
+    if(n * Tiempo <= 2000000){
+        Memorizaci_n.assign(n, vector< vector<long long> >(Tiempo + 1, vector<long long>(2, -2)));
+        return Resolver(Inicio, Tiempo, 0);
     }
-    Memorizaci_n.assign(n, vector< vector<long long> >(Tiempo + 1, vector<long long>(2, -2)));
-    return Resolver(Inicio, Tiempo, 0);
+    deque< vector<long long> > Inicio_m_s_1(2, vector<long long>(Tiempo + 1, 0)), Inicio_menos_1 = Inicio_m_s_1, Izquierda = Inicio_m_s_1, Derecha = Inicio_m_s_1;
+    for(long long i = 1; i <= Tiempo; i++){
+        Inicio_m_s_1[0][i] = max(Inicio_m_s_1[0][i], Atracciones.back());
+    }
+    for(long long i = n - 2; i > Inicio; i--){
+        swap(Inicio_m_s_1[0], Inicio_m_s_1[1]);
+        Inicio_m_s_1[0][0] = 0;
+        for(long long j = 1; j <= Tiempo; j++){
+            long long m = Atracciones[i];
+            m = max(m, Inicio_m_s_1[1][j - 1]);
+            if(j > 1) m = max(m, Inicio_m_s_1[1][j - 2] + Atracciones[i]);
+            Inicio_m_s_1[0][j] = m;
+        }
+    }
+    for(long long i = 1; i <= Tiempo; i++){
+        Inicio_menos_1[0][i] = max(Atracciones[0], Inicio_menos_1[0][i]);
+    }
+    for(long long i = 1; i < Inicio; i++){
+        swap(Inicio_menos_1[0], Inicio_menos_1[1]);
+        Inicio_menos_1[0][0] = 0;
+        for(long long j = 1; j <= Tiempo; j++){
+            long long m = Atracciones[i];
+            m = max(m, Inicio_menos_1[1][j - 1]);
+            if(j > 1) m = max(m, Inicio_menos_1[1][j - 2] + Atracciones[i]);
+            Inicio_menos_1[0][j] = m;
+        }
+    }
+    for(long long i = 1; i <= Tiempo; i++){
+        Izquierda[0][i] = max(Izquierda[0][i], Atracciones[0]);
+    }
+    for(long long i = 1; i < Inicio; i++){
+        swap(Izquierda[0], Izquierda[1]);
+        Izquierda[0][0] = 0;
+        for(long long j = 1; j <= Tiempo; j++){
+            long long m = Atracciones[i];
+            m = max(m, Izquierda[1][j - 1]);
+            if(j > 1) m = max(m, Izquierda[1][j - 2] + Atracciones[i]);
+            if(Inicio + 1 < n and j - (Inicio - i) - 1 > 0) m = max(m, Inicio_m_s_1[0][j - (Inicio - i) - 1]);
+            if(Inicio + 1 < n and j - (Inicio - i) - 2 > 0) m = max(m, Inicio_m_s_1[0][j - (Inicio - i) - 2] + Atracciones[i]);
+            Izquierda[0][j] = m;
+        }
+    }
+    for(long long i = 1; i <= Tiempo; i++){
+        Derecha[0][i] = max(Atracciones.back(), Derecha[0][i]);
+    }
+    for(long long i = n - 2; i > Inicio; i--){
+        swap(Derecha[0], Derecha[1]);
+        Derecha[0][0] = 0;
+        for(long long j = 1; j <= Tiempo; j++){
+            long long m = Atracciones[i];
+            m = max(m, Derecha[1][j - 1]);
+            if(j > 1) m = max(m, Derecha[1][j - 2] + Atracciones[i]);
+            if(Inicio > 0 and j - (i - Inicio) - 1 > 0) m = max(m, Inicio_menos_1[0][j - (i - Inicio) - 1]);
+            if(Inicio > 0 and j - (i - Inicio) - 2 > 0) m = max(m, Inicio_menos_1[0][j - (i - Inicio) - 2] + Atracciones[i]);
+            Derecha[0][j] = m;
+        }
+    }
+    long long m = Atracciones[Inicio];
+    if(Inicio + 1 < n) m = max(m, Derecha[0][Tiempo - 1]);
+    if(Inicio + 1 < n and Tiempo > 1) m = max(m, Derecha[0][Tiempo - 2] + Atracciones[Inicio]);
+    if(Inicio > 0) m = max(m, Izquierda[0][Tiempo - 1]);
+    if(Inicio > 0 and Tiempo > 1) m = max(m, Izquierda[0][Tiempo - 2] + Atracciones[Inicio]);
+    return m;
 }
 /*
 Caso fallido.
-3 0 7
-0 1 2
-Salida: 1
-Debería ser 3.
+
+
+Salida: 
+Debería ser .
 */
