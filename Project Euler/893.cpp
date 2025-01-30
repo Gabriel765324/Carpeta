@@ -1,4 +1,3 @@
-//Aun está mal :(.
 #include "bits/stdc++.h"
 using namespace std;
 long long m = 1000001;
@@ -28,8 +27,8 @@ int main(){
     for(long long i = 1; i < 10; i++){
         for(long long j = 1; j < 10; j++){
             Respuestas[i + j].first = min(Respuestas[i + j].first, Respuestas[i].first + Respuestas[j].first + 2);
-            Respuestas[i * j].first = min(Respuestas[i * j].first, Respuestas[i].first + Respuestas[j].first + 2);
-            //Respuestas[i * j].second = min(Respuestas[i * j].second, Respuestas[i].second + Respuestas[j].second + 2);
+            //Respuestas[i * j].first = min(Respuestas[i * j].first, Respuestas[i].first + Respuestas[j].first + 2);
+            Respuestas[i * j].second = min(Respuestas[i * j].second, Respuestas[i].second + Respuestas[j].second + 2);
             //Respuestas[i + j].first = min(Respuestas[i + j].first, min(Respuestas[i].first, Respuestas[i].second) + min(Respuestas[j].first, Respuestas[j].second) + 2);
         }
         s += min(Respuestas[i].first, Respuestas[i].second);
@@ -40,11 +39,15 @@ int main(){
         if(i % 10000 == 0) cerr<<i<<"\n";
         //if(i % 10000 == 0) cerr<<i<<"\n";
         for(long long j = 1; j <= i; j++){
-            if(i + j < m) Respuestas[i + j].first = min(Respuestas[i + j].first, Respuestas[i].first + Respuestas[j].first + 2);
+            /*if(i + j < m) Respuestas[i + j].first = min(Respuestas[i + j].first, Respuestas[i].first + Respuestas[j].first + 2);
             else break;
-            if(i * j < m) Respuestas[i * j].first = min(Respuestas[i * j].first, Respuestas[i].first + Respuestas[j].first + 2);
-            //if(i * j < m) Respuestas[i * j].second = min(Respuestas[i * j].second, Respuestas[i].second + Respuestas[j].second + 2);
-            //if(i + j < m) Respuestas[i + j].first = min(Respuestas[i + j].first, min(Respuestas[i].first, Respuestas[i].second) + min(Respuestas[j].first, Respuestas[j].second) + 2);
+            if(i * j < m){
+                Respuestas[i * j].first = min(Respuestas[i * j].first, Respuestas[i].first + Respuestas[j].first + 2);
+            }*/
+            if(i + j < m) Respuestas[i + j].first = min(Respuestas[i + j].first, min(Respuestas[i].first, Respuestas[i].second) + min(Respuestas[j].first, Respuestas[j].second) + 2);
+            else break;
+            if(i * j < m) Respuestas[i * j].second = min(Respuestas[i * j].second, Respuestas[i].second + Respuestas[j].second + 2);
+            
         }
         s += min(Respuestas[i].first, Respuestas[i].second);
     }
@@ -63,4 +66,4 @@ int main(){
         cout<<c<<" "<<min(Respuestas[c].first, Respuestas[c].second)<<" "<<s<<" "<<min(Mejores[c].first, Mejores[c].second)<<((min(Respuestas[c].first, Respuestas[c].second) != min(Mejores[c].first, Mejores[c].second)) ? " Aquí." : "")<<"\n";
     }*/
     return 0;
-}
+} //La respuesta es 26688208.
