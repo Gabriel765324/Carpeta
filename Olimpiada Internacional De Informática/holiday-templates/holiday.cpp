@@ -43,33 +43,25 @@ long long int findMaxAttraction(int N, int start, int d, int attraction[]){
     for(long long i = 0; i < n; i++) Atracciones.push_back(attraction[i]);
     if(Tiempo == 0) return 0;
     if(n == 1) return Atracciones[0];
+    if(Inicio == 0){
+        multiset<long long> Mejores;
+        long long Suma = 0, Mejor = 0;
+        for(long long i = 0; i < n and i < Tiempo; i++){
+            Mejores.insert(Atracciones[i]);
+            Suma += Atracciones[i];
+            long long Precio = Mejores.size() + i;
+            while(Precio > Tiempo){
+                Suma -= *Mejores.begin();
+                Mejores.erase(Mejores.begin());
+                Precio = Mejores.size() + i;
+            }
+            Mejor = max(Suma, Mejor);
+        }
+        return Mejor;
+    }
     if(n * Tiempo <= 2000000){
         Memorizaci_n.assign(n, vector< vector<long long> >(Tiempo + 1, vector<long long>(2, -2)));
         return Resolver(Inicio, Tiempo, 0);
-    }
-    if(Inicio == 0){
-        multiset<long long> Mejores;
-        long long m = 0, i;
-        for(i = 0; Tiempo > 1; i++){
-            Tiempo -= 2;
-            Mejores.insert(Atracciones[i]);
-            m += Atracciones[i];
-        }
-        long long r = m;
-        bool Primero = 0;
-        if(Tiempo == 1) Primero = 1;
-        while(i < n and Mejores.size() > 1){
-            Mejores.insert(Atracciones[i]);
-            m += Atracciones[i];
-            m -= *Mejores.begin();
-            Mejores.erase(Mejores.begin());
-            if(!Primero){
-                m -= *Mejores.begin();
-                Mejores.erase(Mejores.begin());
-            } else Primero = 0;
-            i++;
-            r = max(r, m);
-        }
     }
     deque< vector<long long> > Inicio_m_s_1(2, vector<long long>(Tiempo + 1, 0)), Inicio_menos_1 = Inicio_m_s_1, Izquierda = Inicio_m_s_1, Derecha = Inicio_m_s_1;
     for(long long i = 1; i <= Tiempo; i++){
