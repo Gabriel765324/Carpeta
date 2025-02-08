@@ -1,33 +1,16 @@
 #include "bits/stdc++.h"
 using namespace std;
 long long m = 1e9 + 7;
-long long n;
+vector< vector< vector<long long> > > Memorizaci_n;
+long long n, N, M;
 string s, t;
-vector<string> Crear(long long i, long long j){
-    if(i == n and j == i) return {""};
-    vector<string> Retorno, Retorno_extra;
-    if(i == n and j != n){
-        Retorno = Crear(i, j + 1);
-        for(long long k = 0; k < Retorno.size(); k++){
-            Retorno[k] += t[j];
-        }
-    } else if(i != j and j == n){
-        Retorno = Crear(i + 1, j);
-        for(long long k = 0; k < Retorno.size(); k++){
-            Retorno[k] += s[i];
-        }
-    } else {
-        Retorno = Crear(i + 1, j);
-        Retorno_extra = Crear(i, j + 1);
-        for(long long k = 0; k < Retorno.size(); k++){
-            Retorno[k] += s[i];
-        }
-        for(long long k = 0; k < Retorno_extra.size(); k++){
-            Retorno_extra[k] += t[j];
-            Retorno.push_back(Retorno_extra[k]);
-        }
-    }
-    return Retorno;
+long long Suma(long long a, long long b){
+    return (a % m + b % m) % m;
+}
+bool Mismo_tipo(char a, char b){
+    if(a >= '0' and a <= '9' and b <= '9' and b >= '0') return 1;
+    if(a == b) return 1;
+    return 0;
 }
 int main(){
     ios_base::sync_with_stdio(0);
@@ -36,46 +19,51 @@ int main(){
     cin>>T;
     while(T--){
         cin>>n>>s>>t;
-        //cout<<n<<" "<<s<<" "<<t<<"\n";
-        char Caracter = 'a';
-        for(long long i = 0; i < n; i++){
-            if(s[i] == '+'){
-                s[i] = Caracter;
-                Caracter++;
-            }
+        long long i;
+        for(i = n; i > -1 and s[i] != '0'; i--){}
+        string Nuevo = "";
+        for(i = max(i, 0LL); i <= n; i++) if(s[i] != '1') Nuevo += s[i];
+        s = Nuevo;
+        for(i = n; i > -1 and t[i] != '0'; i--){}
+        Nuevo = "";
+        for(i = max(i, 0LL); i <= n; i++) if(t[i] != '1') Nuevo += t[i];
+        t = Nuevo;
+        N = s.size();
+        M = t.size();
+        //cout<<s<<" "<<t<<" "<<N<<" "<<M<<" ";
+        Memorizaci_n.assign(N + 2, vector< vector<long long> >(M + 2,  vector<long long>(2, 0)));
+        if(N == 0 or M == 0){
+            cout<<"1\n";
+            continue;
         }
-        for(long long i = 0; i < n; i++){
-            if(t[i] == '+'){
-                t[i] = Caracter;
-                Caracter++;
-            }
-        }
-        vector<string> Posibilidades = Crear(0, 0);
-        for(long long i = 0; i < Posibilidades.size(); i++){
-            long long N = Posibilidades[i].size();
-            for(long long j = 0; j < N / 2; j++){
-                swap(Posibilidades[i][j], Posibilidades[i][N - j - 1]);
-            }
-        }
-        set< map<char, long long> > Se_puede_crear;
-        n *= 2;
-        for(long long Posibilidad = 0; Posibilidad < Posibilidades.size(); Posibilidad++){
-            map<char, long long> Suma;
-            for(long long i = 0; i < n; i++){
-                if(Posibilidades[Posibilidad][i] < '0' or Posibilidades[Posibilidad][i] > '9'){
-                    Suma[Posibilidades[Posibilidad][i]]++;
-                } else {
-                    long long Multiplicar = Posibilidades[Posibilidad][i] - '0';
-                    for(long long j = i; j > -1; j--){
-                        if(Posibilidades[Posibilidad][j] < '0' or Posibilidades[Posibilidad][j] > '9') Suma[Posibilidades[Posibilidad][j]] *= Multiplicar;
+        Memorizaci_n[0][0][0] = 1;
+        for(long long i = 0; i < N; i++){
+            for(long long j = 0; j < M; j++){
+                for(long long k = 0; k < 2; k++){
+                    if(i == 0 and j == 0){
+                        Memorizaci_n[i][j + 1][1] = Suma(Memorizaci_n[i][j][k], Memorizaci_n[i][j + 1][1]);
+                        Memorizaci_n[i + 1][j][0] = Suma(Memorizaci_n[i][j][k], Memorizaci_n[i + 1][j][0]);
+                        continue;
+                    }
+                    Memorizaci_n[i][j + 1][1] = Suma(Memorizaci_n[i][j][k], Memorizaci_n[i][j + 1][1]);
+                    if(k == 0) Memorizaci_n[i + 1][j][0] = Suma(Memorizaci_n[i][j][0], Memorizaci_n[i + 1][j][0]);
+                    else {
+                        if(j > 0 and !Mismo_tipo(s[i], t[j - 1])) Memorizaci_n[i + 1][j][0] = Suma(Memorizaci_n[i][j][1], Memorizaci_n[i + 1][j][0]);
                     }
                 }
             }
-            Se_puede_crear.insert(Suma);
         }
-        cout<<Se_puede_crear.size() % m<<"\n";
-        //cout<<Posibilidades.size();
-        //for(auto E: Posibilidades) cout<<E<<"\n";
+        /*for(auto E: Memorizaci_n){
+            for(auto e: E) cout<<e[0]<<" ";
+            cout<<"\n";
+        }
+        cout<<"\n";
+        for(auto E: Memorizaci_n){
+            for(auto e: E) cout<<e[1]<<" ";
+            cout<<"\n";
+        }
+        cout<<"\n";*/
+        cout<<Suma(Memorizaci_n[N - 1][M - 1][0], Memorizaci_n[N - 1][M - 1][1])<<"\n";
     }
     return 0;
 }
