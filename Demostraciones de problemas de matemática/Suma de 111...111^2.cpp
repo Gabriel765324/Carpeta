@@ -13,7 +13,7 @@ long long f(long long n){
         s += (n - 10) % 9;
         return s;
     }
-    return 81 + (n - 10) * 9;
+    return 82 + (n - 10) * 9;
 }
 string Suma(string a, string b){
     while(a.size() < b.size()) a = '0' + a;
@@ -41,7 +41,7 @@ string Suma(string a, string b){
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    for(long long n = 100000; n <= 100000; n++){
+    for(long long n = 13; n <= 32; n++){
         string a(n, '1');
         string r = "-2";
         for(long long i = 0; i < n; i++){
@@ -51,11 +51,12 @@ int main(){
             }
             a += '0';
         }
-        long long s = n;
-        n = 0;
-        for(long long i = 0; i < r.size(); i++) n += r[i] - '0';
-        if(f(s) != n){
-            cout<<"Mal. "<<r<<" "<<f(s)<<" "<<n;
+        long long s = n, c = n;
+        c = 0;
+        for(long long i = 0; i < r.size(); i++) c += r[i] - '0';
+        cout<<r<<" "<<f(s)<<" "<<c<<"\n";
+        if(f(s) != c){
+            cout<<"Mal. "<<r<<" "<<f(s)<<" "<<c;
             return 0;
         }
     }
