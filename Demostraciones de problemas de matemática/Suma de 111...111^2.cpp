@@ -41,7 +41,7 @@ string Suma(string a, string b){
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
-    for(long long n = 13; n <= 32; n++){
+    for(long long n = 1; n <= 1022; n++){
         string a(n, '1');
         string r = "-2";
         for(long long i = 0; i < n; i++){
