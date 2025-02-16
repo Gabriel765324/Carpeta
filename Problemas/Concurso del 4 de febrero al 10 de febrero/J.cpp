@@ -31,7 +31,7 @@ int main(){
         }
         for(long long i = 1; i < n; i++){
             if(a[i] != Menor + i){
-                Orden.push_back({{1, i + 1}, {Menor, Menor + 1}});
+                Orden.push_back({{1, i + 1}, {Menor, Menor + i}});
                 a[i] = Menor + i;
             }
         }

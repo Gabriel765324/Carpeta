@@ -1,6 +1,6 @@
 #include "bits/stdc++.h"
 using namespace std;
-//¿Para qué le puse también suma al árbol se segmentos?
+//¿Para qué le puse también suma al árbol de segmentos?
 mt19937_64 Aleatorio(16);
 vector<long long> a, Llevo, Propagar;
 struct Nodo{
@@ -31,8 +31,10 @@ Nodo Consulta(long long i, long long d, long long p, long long I, long long D){
         _rbol[p].Menor += Propagar[p];
         _rbol[p].Suma += (d - i + 1) * Propagar[p];
         if(i != d){
-            Propagar[p * 2] += Propagar[p];
-            Propagar[p * 2 + 1] += Propagar[p];
+            if(Propagar[p * 2] != Mucho) Propagar[p * 2] += Propagar[p];
+            else Propagar[p * 2] = Propagar[p];
+            if(Propagar[p * 2 + 1] != Mucho) Propagar[p * 2 + 1] += Propagar[p];
+            else Propagar[p * 2 + 1] = Propagar[p];
         }
         Propagar[p] = Mucho;
     }
@@ -46,8 +48,10 @@ void Actualizar(long long i, long long d, long long p, long long I, long long D,
         _rbol[p].Menor += Propagar[p];
         _rbol[p].Suma += (d - i + 1) * Propagar[p];
         if(i != d){
-            Propagar[p * 2] += Propagar[p];
-            Propagar[p * 2 + 1] += Propagar[p];
+            if(Propagar[p * 2] != Mucho) Propagar[p * 2] += Propagar[p];
+            else Propagar[p * 2] = Propagar[p];
+            if(Propagar[p * 2 + 1] != Mucho) Propagar[p * 2 + 1] += Propagar[p];
+            else Propagar[p * 2 + 1] = Propagar[p];
         }
         Propagar[p] = Mucho;
     }
@@ -55,8 +59,10 @@ void Actualizar(long long i, long long d, long long p, long long I, long long D,
         _rbol[p].Menor += v;
         _rbol[p].Suma += (d - i + 1) * v;
         if(i != d){
-            Propagar[p * 2] += v;
-            Propagar[p * 2 + 1] += v;
+            if(Propagar[p * 2] != Mucho) Propagar[p * 2] += v;
+            else Propagar[p * 2] = v;
+            if(Propagar[p * 2 + 1] != Mucho) Propagar[p * 2 + 1] += v;
+            else Propagar[p * 2 + 1] = v;
         }
         return;
     }
@@ -99,7 +105,13 @@ int main(){
     cout<<r;
     return 0;
 }
-
+/*
+Caso fallido:
+5
+1 -6 -5 -1 -7
+Da: 3
+Debería dar: 2
+*/
     /*uniform_int_distribution<long long> Tama_o(4, 8), Valores(-12, 12);
     long long Caso = 0;
     while(1){
