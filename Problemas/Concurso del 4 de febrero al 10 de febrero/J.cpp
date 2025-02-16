@@ -1,4 +1,3 @@
-//Mal.
 #include "bits/stdc++.h"
 using namespace std;
 int main(){
@@ -10,23 +9,37 @@ int main(){
         long long n;
         cin>>n;
         vector<long long> a(n);
-        for(long long i = 0; i < n; i++) cin>>a[i];
-        if(n == 1){
+        bool Bien = 1;
+        long long Menor = 2222222222222222, Posici_n = -0;
+        for(long long i = 0; i < n; i++){
+            cin>>a[i];
+            if(a[i] < Menor){
+                Menor = a[i];
+                Posici_n = i;
+            }
+            if(i > 0) Bien &= (__gcd(a[i], a[i - 1]) == 1);
+        }
+        if(Bien){
             cout<<"0\n";
             continue;
         }
         vector< pair< pair<long long, long long>, pair<long long, long long> > > Orden;
-        for(long long i = 0; i < n - 1; i++){
-            long long m = min(a[i], a[i + 1]);
-            if(i == 0){
-                a[0] = m + 1;
-                a[1] = m;
-                Orden.push_back({{i + 1, i + 2}, {m + 1, m}});
-            } else {
-                a[i] = a[0] + i;
-                a[i + 1] = m;
-                Orden.push_back({{i + 1, i + 2}, {a[0] + i, m}});
+        if(Posici_n > 0){
+            Orden.push_back({{1, Posici_n + 1}, {Menor, Menor + Posici_n}});
+            a[0] = Menor;
+            a[Posici_n] = Menor + Posici_n;
+        }
+        for(long long i = 1; i < n; i++){
+            if(a[i] != Menor + i){
+                Orden.push_back({{1, i + 1}, {Menor, Menor + 1}});
+                a[i] = Menor + i;
             }
+        }
+        /*for(auto E: a) cout<<E<<" ";
+        cout<<"\n";*/
+        cout<<Orden.size()<<"\n";
+        for(auto E: Orden){
+            cout<<E.first.first<<" "<<E.first.second<<" "<<E.second.first<<" "<<E.second.second<<"\n";
         }
     }
     return 0;
