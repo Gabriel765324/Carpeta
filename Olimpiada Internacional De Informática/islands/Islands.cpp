@@ -240,8 +240,8 @@ int main(){
             Actualizar_izquierdo(0, m - 1, 1, 0, m - 1, Pesos[{E[i], E[i + 1]}]);
             Actualizar_derecho(0, m - 1, 1, 0, m - 1, -Pesos[{E[i], E[i + 1]}]);
             long long Valor_izquierdo_del_siguiente = Consulta_izquierda(0, m - 1, 1, i + 1, i + 1), Valor_derecho_del_siguiente = Consulta_derecha(0, m - 1, 1, i + 1, i + 1);
-            Actualizar_izquierdo(0, m - 1, 1, i + 1, i + 1, -Valor_izquierdo_del_siguiente);
-            Actualizar_derecho(0, m - 1, 1, i + 1, i + 1, Longitud_del_ciclo - Valor_derecho_del_siguiente);
+            Actualizar_izquierdo(0, m - 1, 1, i + 1, i + 1, -Valor_izquierdo_del_siguiente + Valor_de_los_nodos[E[i + 1]]);
+            Actualizar_derecho(0, m - 1, 1, i + 1, i + 1, Longitud_del_ciclo - Valor_derecho_del_siguiente + Valor_de_los_nodos[E[i + 1]]);
         }
         Respuesta_final += Respuesta;
     }
