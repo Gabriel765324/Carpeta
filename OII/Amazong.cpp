@@ -20,8 +20,9 @@ int main(){
         Grafo[b].push_back({a, c});
     }
     vector<int> Posici_n(n, 0);
-    unordered_map<long long, int> Mapa;
-    int r = 0, Nodo = 0;
+    unordered_map<long long, long long> Mapa;
+    long long r = 0;
+    int Nodo = 0;
     Acumuladas[0] = 0;
     while(1){
         if(Posici_n[Nodo] >= Grafo[Nodo].size() and Nodo == 0) break;
