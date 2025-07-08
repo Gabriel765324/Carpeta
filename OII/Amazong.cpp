@@ -25,6 +25,7 @@ int main(){
     int Nodo = 0;
     Acumuladas[0] = 0;
     while(1){
+        cerr<<Nodo + 1<<" ";
         if(Posici_n[Nodo] >= Grafo[Nodo].size() and Nodo == 0) break;
         if(Posici_n[Nodo] == 0){
             r += Mapa[Acumuladas[Nodo]];
