@@ -18,7 +18,6 @@
 *.ini
 *.json
 *.prob
-*.sh
 *.h
 Codeforces/Problemas/Genera casos.cpp
 Codeforces/Good bye 2024/D.cpp
