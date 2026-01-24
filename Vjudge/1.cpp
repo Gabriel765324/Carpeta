@@ -10,6 +10,7 @@
 #define S second
 #define vi vector<int>
 #define el "\n"
+#define mp make_pair
 using namespace std;
 const int nn = 2e5 + 22;
 ll a[nn];
