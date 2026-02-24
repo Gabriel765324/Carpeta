@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="9"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 08:07:59 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzoxOTo1NiBwLiBtLjszMDkw"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswODowNzo1OSBwLiBtLjsyOzMyMDA="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="a" type="Real" array="False" size=""/>
+            <declare name="d" type="Integer" array="False" size=""/>
+            <output expression="&quot;D&#233; el precio.&quot;" newline="True"/>
+            <input variable="a"/>
+            <if expression="a &gt;= 200">
+                <then>
+                    <assign variable="a" expression="a * 0.85"/>
+                    <assign variable="d" expression="15"/>
+                </then>
+                <else>
+                    <if expression="a &gt; 100">
+                        <then>
+                            <assign variable="a" expression="a * 0.88"/>
+                            <assign variable="d" expression="12"/>
+                        </then>
+                        <else>
+                            <if expression="a &lt; 100">
+                                <then>
+                                    <assign variable="a" expression="a * 0.9"/>
+                                    <assign variable="d" expression="10"/>
+                                </then>
+                                <else>
+                                    <assign variable="d" expression="0"/>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <output expression="&quot;El costo es &quot;&amp;a&amp;&quot; bolivianos y el descuento es &quot;&amp;d&amp;&quot;%.&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

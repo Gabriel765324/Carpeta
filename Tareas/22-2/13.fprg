@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="13"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 07:41:30 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzozNjoxOSBwLiBtLjszMDg4"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzo0MTozMCBwLiBtLjsxOzMxODU="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="a" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; el valor que dio el ministerio.&quot;" newline="True"/>
+            <input variable="a"/>
+            <assign variable="a" expression="a * a * a - 2 * a * a + 3 * a - 5"/>
+            <if expression="a &gt;= -10 and a &lt;= 10">
+                <then>
+                    <output expression="&quot;El precio se queda igual.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <if expression="a &lt; 0">
+                        <then>
+                            <output expression="&quot;El precio bajar&#225; un &quot;&amp;-a&amp;&quot;%.&quot;" newline="True"/>
+                        </then>
+                        <else>
+                            <output expression="&quot;El precio subir&#225; un&quot;&amp;a&amp;&quot;%.&quot;" newline="True"/>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

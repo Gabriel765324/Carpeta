@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="1"/>
+        <attribute name="authors" value="Clases"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-19 11:10:14 a.&#160;m."/>
+        <attribute name="created" value="Q2xhc2VzO0xBQjcwMjsyMDI2LTAyLTE5OzA4OjU1OjI1IGEuwqBtLjsyNTU1"/>
+        <attribute name="edited" value="Q2xhc2VzO0xBQjcwMjsyMDI2LTAyLTE5OzExOjEwOjE0IGEuwqBtLjsxOzI2NDY="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="a, b, c, d, m" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; las 4 notas.&quot;" newline="True"/>
+            <input variable="a"/>
+            <assign variable="m" expression="a"/>
+            <input variable="b"/>
+            <if expression="b &lt; m">
+                <then>
+                    <assign variable="m" expression="b"/>
+                </then>
+                <else/>
+            </if>
+            <input variable="c"/>
+            <if expression="c &lt; m">
+                <then>
+                    <assign variable="m" expression="c"/>
+                </then>
+                <else/>
+            </if>
+            <input variable="d"/>
+            <if expression="d &lt; m">
+                <then>
+                    <assign variable="m" expression="d"/>
+                </then>
+                <else/>
+            </if>
+            <output expression="&quot;La nota es &quot;&amp;(a + b + c + d - m) / 3&amp;&quot;.&quot;" newline="False"/>
+        </body>
+    </function>
+</flowgorithm>

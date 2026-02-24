@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="7"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 07:18:22 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzoxNTowMCBwLiBtLjszMDc1"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzoxODoyMiBwLiBtLjsyOzMxOTE="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="d, i" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; el dinero prestado y el inter&#233;s extrasado como un n&#250;mero.&quot;" newline="True"/>
+            <input variable="d"/>
+            <input variable="i"/>
+            <output expression="&quot;El inter&#233;s mensual es de &quot;&amp;d * i&amp;&quot; bolivianos y, en el caso espec&#237;fico dado en el problema, el inter&#233;s es de &quot;&amp;10000 * 0.02&amp;&quot; bolivianos.&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

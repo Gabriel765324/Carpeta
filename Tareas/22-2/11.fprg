@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="9"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 07:31:17 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzoxOTo1NiBwLiBtLjszMDkw"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzozMToxNyBwLiBtLjsyOzMxOTA="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="a" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; la antig&#252;edad en a&#241;os.&quot;" newline="True"/>
+            <input variable="a"/>
+            <if expression="a &lt; 3">
+                <then>
+                    <assign variable="a" expression="1.03"/>
+                </then>
+                <else>
+                    <if expression="a &lt; 5">
+                        <then>
+                            <assign variable="a" expression="1.05"/>
+                        </then>
+                        <else>
+                            <if expression="a &lt; 10">
+                                <then>
+                                    <assign variable="a" expression="1.07"/>
+                                </then>
+                                <else>
+                                    <assign variable="a" expression="1.1"/>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <output expression="&quot;El salario es de &quot;&amp;a * 40000&amp;&quot; euros.&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="12"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 07:35:59 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzozMTo0MiBwLiBtLjszMDc5"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzozNTo1OSBwLiBtLjsxOzMxOTk="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="e, c" type="Real" array="False" size=""/>
+            <declare name="t" type="Integer" array="False" size=""/>
+            <output expression="&quot;D&#233; la edad del paciente y d&#233; el tipo del paciente.&quot;" newline="True"/>
+            <input variable="e"/>
+            <input variable="t"/>
+            <if expression="t &lt; 1 and t &gt; 4">
+                <then>
+                    <output expression="&quot;No es un tipo v&#225;lido.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <if expression="t == 1">
+                        <then>
+                            <assign variable="c" expression="1200"/>
+                        </then>
+                        <else>
+                            <if expression="t == 2">
+                                <then>
+                                    <assign variable="c" expression="1500"/>
+                                </then>
+                                <else>
+                                    <if expression="t == 3">
+                                        <then>
+                                            <assign variable="c" expression="1700"/>
+                                        </then>
+                                        <else>
+                                            <assign variable="c" expression="2000"/>
+                                        </else>
+                                    </if>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+            <if expression="e &lt; 15 or e &gt; 70">
+                <then>
+                    <assign variable="c" expression="c * 1.2"/>
+                </then>
+                <else/>
+            </if>
+            <output expression="&quot;El costo es de &quot;&amp;c&amp;&quot; bolivianos.&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

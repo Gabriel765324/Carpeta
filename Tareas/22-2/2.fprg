@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="2"/>
+        <attribute name="authors" value="Clases"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-19 11:14:45 a.&#160;m."/>
+        <attribute name="created" value="Q2xhc2VzO0xBQjcwMjsyMDI2LTAyLTE5OzExOjEwOjE4IGEuwqBtLjsyNTQy"/>
+        <attribute name="edited" value="Q2xhc2VzO0xBQjcwMjsyMDI2LTAyLTE5OzExOjE0OjQ1IGEuwqBtLjsxOzI2NTQ="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="a, b, c" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; los 3 n&#250;meros.&quot;" newline="True"/>
+            <input variable="a"/>
+            <input variable="b"/>
+            <input variable="c"/>
+            <if expression="!(a &gt;= (b + c) or b &gt;= (a + c) or c &gt;= (a + b))">
+                <then>
+                    <if expression="a != b and b != c and a != c">
+                        <then>
+                            <output expression="&quot;Escaleno.&quot;" newline="True"/>
+                        </then>
+                        <else>
+                            <if expression="a == b and b == c">
+                                <then>
+                                    <output expression="&quot;Equil&#225;tero.&quot;" newline="True"/>
+                                </then>
+                                <else>
+                                    <output expression="&quot;Is&#243;sceles.&quot;" newline="True"/>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </then>
+                <else>
+                    <output expression="&quot;No es un tri&#225;ngulo.&quot;" newline="True"/>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>

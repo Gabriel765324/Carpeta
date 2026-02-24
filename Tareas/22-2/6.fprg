@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="6"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 07:14:58 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzoxMjoyMSBwLiBtLjszMDc1"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzoxNDo1OCBwLiBtLjsxOzMxOTU="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="i, f" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; la lectura inicial y la lectura final.&quot;" newline="True"/>
+            <input variable="i"/>
+            <input variable="f"/>
+            <output expression="&quot;Se consumi&#243; &quot;&amp;f - i&amp;&quot; watts y hay que pagar &quot;&amp;(f - i) * 0.015 * 1.1&amp;&quot; bolivianos.&quot;" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

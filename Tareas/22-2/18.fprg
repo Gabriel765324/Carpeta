@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="18"/>
+        <attribute name="authors" value="USUARIO"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2026-02-22 08:03:25 p. m."/>
+        <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzo1ODo1MCBwLiBtLjszMDg3"/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswODowMzoyNSBwLiBtLjsxOzMxODg="/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="n0, n1, n2" type="Integer" array="False" size=""/>
+            <declare name="e0, e1, e2, m" type="Real" array="False" size=""/>
+            <output expression="&quot;D&#233; los 3 nombres y las 3 edades.&quot;" newline="True"/>
+            <input variable="n0"/>
+            <input variable="n1"/>
+            <input variable="n2"/>
+            <input variable="e0"/>
+            <assign variable="m" expression="e0"/>
+            <input variable="e1"/>
+            <input variable="e2"/>
+            <if expression="e1 &lt; m">
+                <then>
+                    <assign variable="m" expression="e1"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="e2 &lt; m">
+                <then>
+                    <assign variable="m" expression="e2"/>
+                </then>
+                <else/>
+            </if>
+            <if expression="m == e0 and m != e1 and m != e2">
+                <then>
+                    <output expression="n0&amp;&quot; &quot;&amp;e0&amp;&quot;.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <if expression="m == e1 and m != e0 and m != e2">
+                        <then>
+                            <output expression="n1&amp;&quot; &quot;&amp;e1&amp;&quot;.&quot;" newline="True"/>
+                        </then>
+                        <else>
+                            <if expression="m == e2 and m != e0 and m != e1">
+                                <then>
+                                    <output expression="n2&amp;&quot; &quot;&amp;e2&amp;&quot;.&quot;" newline="True"/>
+                                </then>
+                                <else>
+                                    <output expression="&quot;Hay un empate.&quot;" newline="True"/>
+                                </else>
+                            </if>
+                        </else>
+                    </if>
+                </else>
+            </if>
+        </body>
+    </function>
+</flowgorithm>
