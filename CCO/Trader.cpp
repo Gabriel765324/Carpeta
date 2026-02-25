@@ -1,25 +1,332 @@
 #include "bits/stdc++.h"
 using namespace std;
+struct Valor{
+    long long Mejor_y_vuelvo, Mejor_y_me_quedo;
+    bool Existo;
+    vector<int> Nodos_volver, Usar_volver, Nodos_no_volver, Usar_no_volver;
+};
+struct Candidato_usar_volver{
+    int _ndice;
+    long long Mejor;
+};
+struct Candidato_no_usar_volver{
+    int _ndice;
+    long long Mejor;
+};
+struct Candidato_usar_no_volver{
+    int _ndice;
+    long long Mejor;
+};
+struct Candidato_no_usar_no_volver{
+    int _ndice;
+    long long Mejor;
+};
+struct Candidato{
+    long long Mejor;
+    int Usar, Volver, _ndice;
+};
+bool operator<(const Candidato_usar_volver& A, const Candidato_usar_volver& B){
+    return A.Mejor < B.Mejor;
+}
+bool operator<(const Candidato_no_usar_volver& A, const Candidato_no_usar_volver& B){
+    return A.Mejor < B.Mejor;
+}
+bool operator<(const Candidato_usar_no_volver& A, const Candidato_usar_no_volver& B){
+    return A.Mejor < B.Mejor;
+}
+bool operator<(const Candidato_no_usar_no_volver& A, const Candidato_no_usar_no_volver& B){
+    return A.Mejor < B.Mejor;
+}
+bool operator<(const Candidato& A, const Candidato& B){
+    return A.Mejor < B.Mejor;
+}
+vector< vector<Valor> > PD;
+bitset<222222> Hoja, Visitados;
 vector< vector<long long> > Grafo;
 vector<long long> v, d, a;
 vector<int> Final, Tour;
-int Hay;
-struct Valor{
-    long long Mayor_y_vuelvo, Mayor_y_no_vuelvo, Mejor;
-    vector< pair<int, bool> > Seguir_si_vuelvo;
-    vector< pair<int, bool> > Seguir_si_no_vuelvo;
-    bool Existo, Volver;
-};
-struct Candidato{
-    long long Valor;
-    int i;
-    bool Usar, Vuelve;
-};
-bool operator<(const Candidato& a, const Candidato& b){
-    return a.Valor > b.Valor;
+deque<int> Recorrido;
+Valor Resolver(int Nodo, int Anterior, int Usar){
+    Valor Retorno;
+    if(PD[Nodo][Usar].Existo == 1) return PD[Nodo][Usar];
+    //cerr<<Nodo + 1<<" "<<Usar<<"\n";
+    Retorno.Existo = 1;
+    PD[Nodo][Usar].Existo = 1;
+    if(Hoja[Nodo]){
+        Retorno.Mejor_y_me_quedo = v[Nodo];
+        Retorno.Mejor_y_vuelvo = v[Nodo];
+        return PD[Nodo][Usar] = Retorno;
+    }
+    long long Suma = v[Nodo];
+    int n = Grafo[Nodo].size();
+    vector<Candidato_no_usar_volver> _0;
+    vector<Candidato_no_usar_no_volver> _1;
+    vector<Candidato_usar_volver> _2;
+    vector<Candidato_usar_no_volver> _3;
+    for(int i = 0; i < n; i++){
+        if(Grafo[Nodo][i] == Anterior) continue;
+        Suma += v[Grafo[Nodo][i]];
+        auto e0 = Resolver(Grafo[Nodo][i], Nodo, 0);
+        auto e1 = Resolver(Grafo[Nodo][i], Nodo, 1);
+        e0.Mejor_y_me_quedo -= v[Grafo[Nodo][i]];
+        e0.Mejor_y_vuelvo -= v[Grafo[Nodo][i]];
+        e1.Mejor_y_me_quedo -= v[Grafo[Nodo][i]];
+        e1.Mejor_y_vuelvo -= v[Grafo[Nodo][i]];
+        Candidato_no_usar_volver __0;
+        __0.Mejor = e0.Mejor_y_vuelvo;
+        __0._ndice = i;
+        _0.push_back(__0);
+        Candidato_no_usar_no_volver __1;
+        __1.Mejor = e0.Mejor_y_me_quedo;
+        __1._ndice = i;
+        _1.push_back(__1);
+        Candidato_usar_volver __2;
+        __2.Mejor = e1.Mejor_y_vuelvo;
+        __2._ndice = i;
+        _2.push_back(__2);
+        Candidato_usar_no_volver __3;
+        __3.Mejor = e1.Mejor_y_me_quedo;
+        __3._ndice = i;
+        _3.push_back(__3);
+    }
+    sort(_0.begin(), _0.end());
+    sort(_1.begin(), _1.end());
+    sort(_2.begin(), _2.end());
+    sort(_3.begin(), _3.end());
+    vector<Candidato> Mejores;
+    int c = 0;
+    for(int i = _0.size() - 1; i > -1 and c < 3; i--){
+        Candidato Nuevo;
+        Nuevo.Mejor = _0[i].Mejor;
+        Nuevo.Usar = 0;
+        Nuevo.Volver = 1;
+        Nuevo._ndice = _0[i]._ndice;
+        Mejores.push_back(Nuevo);
+        c++;
+    }
+    c = 0;
+    for(int i = _1.size() - 1; i > -1 and c < 3; i--){
+        Candidato Nuevo;
+        Nuevo.Mejor = _1[i].Mejor;
+        Nuevo.Usar = 0;
+        Nuevo.Volver = 0;
+        Nuevo._ndice = _1[i]._ndice;
+        Mejores.push_back(Nuevo);
+        c++;
+    }
+    c = 0;
+    for(int i = _2.size() - 1; i > -1 and c < 3; i--){
+        Candidato Nuevo;
+        Nuevo.Mejor = _2[i].Mejor;
+        Nuevo.Usar = 1;
+        Nuevo.Volver = 1;
+        Nuevo._ndice = _2[i]._ndice;
+        Mejores.push_back(Nuevo);
+        c++;
+    }
+    c = 0;
+    for(int i = _3.size() - 1; i > -1 and c < 3; i--){
+        Candidato Nuevo;
+        Nuevo.Mejor = _3[i].Mejor;
+        Nuevo.Usar = 1;
+        Nuevo.Volver = 0;
+        Nuevo._ndice = _3[i]._ndice;
+        Mejores.push_back(Nuevo);
+        c++;
+    }
+    /*sort(Mejores.begin(), Mejores.end());
+    reverse(Mejores.begin(), Mejores.end());*/
+    Retorno.Mejor_y_me_quedo = Suma;
+    Retorno.Mejor_y_vuelvo = Suma;
+    n = Mejores.size();
+    vector<int> p_0, p_1, p_2, p_3, p_02, p_13;
+    //cerr<<Nodo + 1<<" "<<Usar<<"\n";
+    for(int i = 0; i < n; i++){
+        if(Mejores[i].Usar == 0 and Mejores[i].Volver == 1){
+            p_0.push_back(i);
+            p_02.push_back(i);
+            //cerr<<i<<" "<<Mejores[i]._ndice<<" ";
+            if(Hoja[Mejores[i]._ndice]) p_2.push_back(i);
+        } else if(Mejores[i].Usar == 0 and Mejores[i].Volver == 0){
+            p_1.push_back(i);
+            p_13.push_back(i);
+            //cerr<<i<<" "<<Mejores[i]._ndice<<" ";
+            if(Hoja[Mejores[i]._ndice]) p_3.push_back(i);
+        } else if(Mejores[i].Usar == 1 and Mejores[i].Volver == 1){
+            p_2.push_back(i);
+            p_02.push_back(i);
+            //cerr<<i<<" "<<Mejores[i]._ndice<<" ";
+            if(Hoja[Mejores[i]._ndice]) p_0.push_back(i);
+        } else if(Mejores[i].Usar == 1 and Mejores[i].Volver == 0){
+            p_3.push_back(i);
+            p_13.push_back(i);
+            //cerr<<i<<" "<<Mejores[i]._ndice<<" ";
+            if(Hoja[Mejores[i]._ndice]) p_1.push_back(i);
+        }
+    }
+    long long Mejor = -2;
+    vector<int> Nodo_para_ir, Usar_nodos;
+    //cerr<<Nodo + 1<<" "<<Usar<<" Par.\n";
+    if(Usar == 1){
+        for(auto E: p_02){
+            //cerr<<"Candidato para mejor que vuelve. "<<Mejores[E].Mejor<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<"\n";
+            if(Mejores[E].Mejor > Mejor){
+                Mejor = Mejores[E].Mejor;
+                Nodo_para_ir = {Mejores[E]._ndice};
+                Usar_nodos = {Mejores[E].Usar};
+            }
+        }
+        Retorno.Mejor_y_vuelvo += Mejor;
+        Retorno.Nodos_volver = Nodo_para_ir;
+        Retorno.Usar_volver = Usar_nodos;
+        //cerr<<Retorno.Mejor_y_vuelvo<<" Volver.\n";
+        Mejor = -2;
+        Nodo_para_ir.clear();
+        Usar_nodos.clear();
+        for(auto E: p_0){
+            for(auto e: p_3){
+                //cerr<<"Candidatos para mejor que no vuelve. "<<Mejores[E].Mejor<<" "<<Mejores[e].Mejor<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<" "<<Grafo[Nodo][Mejores[e]._ndice] + 1<<"\n";
+                if(Mejores[E].Mejor + Mejores[e].Mejor > Mejor and Mejores[E]._ndice != Mejores[e]._ndice){
+                    Mejor = Mejores[E].Mejor + Mejores[e].Mejor;
+                    Nodo_para_ir = {Mejores[E]._ndice, Mejores[e]._ndice};
+                    Usar_nodos = {0, 1};
+                }
+            }
+        }
+        for(auto E: p_13){
+            if(Mejores[E].Mejor > Mejor){
+                Mejor = Mejores[E].Mejor;
+                Nodo_para_ir = {Mejores[E]._ndice};
+                Usar_nodos = {Mejores[E].Usar};
+            }
+        }
+        Retorno.Mejor_y_me_quedo += Mejor;
+        //cerr<<Retorno.Mejor_y_me_quedo<<" No volver.\n";
+        Retorno.Nodos_no_volver = Nodo_para_ir;
+        Retorno.Usar_no_volver = Usar_nodos;
+        return PD[Nodo][Usar] = Retorno;
+    }
+    Mejor = -2;
+    Nodo_para_ir.clear();
+    Usar_nodos.clear();
+    for(auto E: p_2){
+        //cerr<<"Candidato para mejor que vuelve. "<<Mejores[E].Mejor<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<"\n";
+        if(Mejores[E].Mejor > Mejor){
+            Mejor = Mejores[E].Mejor;
+            Nodo_para_ir = {Mejores[E]._ndice};
+            Usar_nodos = {1};
+        }
+        for(auto e: p_02){
+            //cerr<<"Candidatos para mejor que vuelve. "<<Mejores[E].Mejor<<" "<<Mejores[e].Mejor<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<" "<<Grafo[Nodo][Mejores[e]._ndice] + 1<<"\n";
+            if(Mejores[E].Mejor + Mejores[e].Mejor > Mejor and Mejores[E]._ndice != Mejores[e]._ndice){
+                Mejor = Mejores[E].Mejor + Mejores[e].Mejor;
+                Nodo_para_ir = {Mejores[E]._ndice, Mejores[e]._ndice};
+                Usar_nodos = {1, Mejores[e].Usar};
+            }
+        }
+    }
+    Retorno.Mejor_y_vuelvo += Mejor;
+    //cerr<<Retorno.Mejor_y_vuelvo<<" Volver.\n";
+    Retorno.Nodos_volver = Nodo_para_ir;
+    Retorno.Usar_volver = Usar_nodos;
+    Mejor = -2;
+    Nodo_para_ir.clear();
+    Usar_nodos.clear();
+    for(auto E: p_13){
+        //cerr<<"Candidato para mejor que no vuelve. "<<Mejores[E].Mejor<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<"\n";
+        if(Mejores[E].Mejor > Mejor and Mejores[E].Usar == 1){
+            Mejor = Mejores[E].Mejor;
+            Nodo_para_ir = {Mejores[E]._ndice};
+            Usar_nodos = {1};
+        }
+        for(auto e: p_2){
+            //cerr<<"Candidatos para mejor que no vuelve. "<<Mejores[e].Mejor<<" "<<Mejores[E].Mejor<<" "<<Grafo[Nodo][Mejores[e]._ndice] + 1<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<"\n";
+            if(Mejores[E].Mejor + Mejores[e].Mejor > Mejor and Mejores[E]._ndice != Mejores[e]._ndice){
+                Mejor = Mejores[E].Mejor + Mejores[e].Mejor;
+                Nodo_para_ir = {Mejores[e]._ndice, Mejores[E]._ndice};
+                Usar_nodos = {1, Mejores[E].Usar};
+            }
+            /*vector<Candidato_no_usar_volver> _0;
+            vector<Candidato_no_usar_no_volver> _1;
+            vector<Candidato_usar_volver> _2;
+            vector<Candidato_usar_no_volver> _3;*/
+            for(auto EEE/*¿SANS?*/: p_0){
+                //cerr<<"Candidatos para mejor que no vuelve. "<<Mejores[e].Mejor<<" "<<Mejores[EEE].Mejor<<" "<<Mejores[E].Mejor<<" "<<Grafo[Nodo][Mejores[EEE]._ndice] + 1<<" "<<Grafo[Nodo][Mejores[e]._ndice] + 1<<" "<<Grafo[Nodo][Mejores[E]._ndice] + 1<<"\n";
+                if(Mejores[E].Mejor + Mejores[e].Mejor + Mejores[EEE].Mejor > Mejor and Mejores[EEE]._ndice != Mejores[E]._ndice and Mejores[e]._ndice != Mejores[EEE]._ndice and Mejores[E]._ndice != Mejores[e]._ndice and Mejores[E].Usar == 1){
+                    Mejor = Mejores[E].Mejor + Mejores[e].Mejor + Mejores[EEE].Mejor;
+                    Nodo_para_ir = {Mejores[e]._ndice, Mejores[EEE]._ndice, Mejores[E]._ndice};
+                    Usar_nodos = {1, 0, 1};
+                }
+            }
+        }
+    }
+    Retorno.Mejor_y_me_quedo += Mejor;
+    //cerr<<Retorno.Mejor_y_me_quedo<<" No volver.\n";
+    Retorno.Nodos_no_volver = Nodo_para_ir;
+    Retorno.Usar_no_volver = Usar_nodos;
+    return PD[Nodo][Usar] = Retorno;
 }
-vector< vector<Valor> > PD;
+void Reconstruir(int Nodo, int Anterior, int Usar, int Volver){
+    //Visitados[Nodo] = 1;
+    //cerr<<Nodo + 1<<" "<<Usar<<" "<<Volver<<" Reconstrucción.\n";
+    if(Hoja[Nodo]){
+        Recorrido.push_back(Nodo);
+        return;
+    }
+    if(Usar == 1) Recorrido.push_back(Nodo);
+    set<int> No_ir;
+    if(Volver == 1){
+        for(auto E: PD[Nodo][Usar].Nodos_volver){
+            //cerr<<Nodo + 1<<" -> "<<Grafo[Nodo][E] + 1<<"\n";
+            No_ir.insert(E);
+        }
+    } else {
+        for(auto E: PD[Nodo][Usar].Nodos_no_volver){
+            //cerr<<Nodo + 1<<" -> "<<Grafo[Nodo][E] + 1<<"\n";
+            No_ir.insert(E);
+        }
+    }
+    int n = Grafo[Nodo].size();
+    for(int i = 0; i < n; i++){
+        if(Grafo[Nodo][i] == Anterior or No_ir.count(i) >= 1) continue;
+        //cerr<<Nodo + 1<<" - "<<Grafo[Nodo][i] + 1<<"\n";
+        Recorrido.push_back(Grafo[Nodo][i]);
+    }
+    int i = 0;
+    if(Volver == 1){
+        n = PD[Nodo][Usar].Nodos_volver.size();
+        auto e = PD[Nodo][Usar].Usar_volver.begin();
+        for(auto E: PD[Nodo][Usar].Nodos_volver){
+            if(i == 1 and Usar == 0){
+                Usar = 1;
+                Recorrido.push_back(Nodo);
+            }
+            //cerr<<Nodo + 1<<" entra a "<<Grafo[Nodo][E] + 1<<"\n";
+            Reconstruir(Grafo[Nodo][E], Nodo, *e, 1);
+            e++;
+            i++;
+        }
+    } else {
+        n = PD[Nodo][Usar].Nodos_no_volver.size();
+        auto e = PD[Nodo][Usar].Usar_no_volver.begin();
+        for(auto E: PD[Nodo][Usar].Nodos_no_volver){
+            if(i == 1 and Usar == 0){
+                Usar = 1;
+                Recorrido.push_back(Nodo);
+            }
+            int Regresa_aqu_ = 1;
+            if(i == n - 1) Regresa_aqu_ = 0;
+            //cerr<<Nodo + 1<<" entra a "<<Grafo[Nodo][E] + 1<<"\n";
+            Reconstruir(Grafo[Nodo][E], Nodo, *e, Regresa_aqu_);
+            e++;
+            i++;
+        }
+    }
+    if(Usar == 0) Recorrido.push_back(Nodo);
+}
+int Hay;
 void DFS(int Nodo){
+    //cerr<<Nodo<<"\n";
     Hay--;
     Final[Nodo] = Tour.size();
     Tour.push_back(Nodo);
@@ -36,239 +343,28 @@ void DFS(int Nodo){
         }
     }
 }
-bitset<222222> Hoja;
-bitset<222222> Visitados;
-vector<int> Recorrer;
-Valor Resolver(int Nodo, int Anterior, bool Me_usaron){
-    //cerr<<Nodo + 1<<"\n";
-    if(PD[Nodo][Me_usaron > 0 ? 1 : 0].Existo) return PD[Nodo][Me_usaron > 0 ? 1 : 0];
-    PD[Nodo][Me_usaron > 0 ? 1 : 0].Existo = 1;
-    long long Suma = v[Nodo];
-    Valor Retorno;
-    if(Hoja[Nodo]){
-        Retorno.Mayor_y_vuelvo = Suma;
-        Retorno.Seguir_si_vuelvo = {{-2, 0}};
-        Retorno.Mayor_y_no_vuelvo = Suma;
-        Retorno.Seguir_si_no_vuelvo = {{-2, 0}};
-        Retorno.Mejor = Suma;
-        Retorno.Volver = 1;
-        return PD[Nodo][Me_usaron > 0 ? 1 : 0] = Retorno;
-    }
-    int i = -1;
-    vector< pair<long long, pair<int, bool> > > Mejores_que_vuelven, Mejores_que_se_quedan;
-    vector<Candidato> Candidatos;
-    for(auto E: Grafo[Nodo]){
-        i++;
-        if(E == Anterior) continue;
-        Suma += v[E];
-        auto e0 = Resolver(E, Nodo, 0);
-        auto e1 = Resolver(E, Nodo, 1);
-        if(e0.Mayor_y_vuelvo >= e1.Mayor_y_vuelvo) Mejores_que_vuelven.push_back({e0.Mayor_y_vuelvo - v[E], {i, 0}});
-        else Mejores_que_vuelven.push_back({e1.Mayor_y_vuelvo - v[E], {i, 1}});
-        if(e0.Mayor_y_no_vuelvo >= e1.Mayor_y_no_vuelvo) Mejores_que_se_quedan.push_back({e0.Mayor_y_no_vuelvo - v[E], {i, 0}});
-        else Mejores_que_se_quedan.push_back({e1.Mayor_y_no_vuelvo - v[E], {i, 1}});
-    }
-    sort(Mejores_que_vuelven.rbegin(), Mejores_que_vuelven.rend());
-    sort(Mejores_que_se_quedan.rbegin(), Mejores_que_se_quedan.rend());
-    while(Mejores_que_vuelven.size() > 4) Mejores_que_vuelven.pop_back();
-    while(Mejores_que_se_quedan.size() > 4) Mejores_que_se_quedan.pop_back();
-    for(auto E: Mejores_que_se_quedan){
-        Candidato Nuevo;
-        Nuevo.Valor = E.first;
-        Nuevo.i = E.second.first;
-        Nuevo.Vuelve = 0;
-        Candidatos.push_back(Nuevo);
-    }
-    for(auto E: Mejores_que_vuelven){
-        Candidato Nuevo;
-        Nuevo.Valor = E.first;
-        Nuevo.i = E.second.first;
-        Nuevo.Vuelve = 1;
-        Candidatos.push_back(Nuevo);
-    }
-    sort(Candidatos.begin(), Candidatos.end());
-    for(i = 0; i > Candidatos.size(); i++){
-        Candidatos[i].Usar = Candidatos[i].Usar > 0 ? 1 : 0;
-        Candidatos[i].Vuelve = Candidatos[i].Vuelve > 0 ? 1 : 0;
-    }
-    Retorno.Mayor_y_vuelvo = Suma;
-    Retorno.Mayor_y_no_vuelvo = Suma;
-    if(Me_usaron){
-        bool Mal = 1;
-        for(i = 0; i < Candidatos.size() and Mal; i++){
-            for(int j = i + 1; j < Candidatos.size() and Mal; j++){
-                if(Candidatos[i].i != Candidatos[j].i and (int)Candidatos[i].Vuelve + (int)Candidatos[j].Vuelve >= 1){
-                    Mal = 0;
-                    Retorno.Mayor_y_no_vuelvo += Candidatos[i].Valor + Candidatos[j].Valor;
-                    Retorno.Seguir_si_no_vuelvo = {{Candidatos[i].i, Candidatos[i].Usar}, {Candidatos[j].i, Candidatos[j].Usar}};
-                    if(Candidatos[j].Vuelve) swap(Retorno.Seguir_si_no_vuelvo[0], Retorno.Seguir_si_no_vuelvo[1]);
-                    break;
-                }
-            }
-        }
-        if(Mal){
-            Retorno.Mayor_y_no_vuelvo += Candidatos[0].Valor;
-            Retorno.Seguir_si_no_vuelvo = {{Candidatos[0].i, Candidatos[0].Usar}};
-        }
-        for(i = 0; i < Candidatos.size(); i++){
-            if(Candidatos[i].Vuelve){
-                Retorno.Mayor_y_vuelvo += Candidatos[i].Valor;
-                Retorno.Seguir_si_vuelvo = {{Candidatos[i].i, Candidatos[i].Usar}};
-                break;
-            }
-        }
-        Retorno.Mejor = max(Retorno.Mayor_y_vuelvo, Retorno.Mayor_y_no_vuelvo);
-        Retorno.Volver = Retorno.Mayor_y_vuelvo >= Retorno.Mayor_y_no_vuelvo;
-        return PD[Nodo][Me_usaron > 0 ? 1 : 0] = Retorno;
-    }
-    bool Mal = 1;
-    for(i = 0; i < Candidatos.size() and Mal; i++){
-        for(int j = i + 1; j < Candidatos.size() and Mal; j++){
-            for(int k = j + 1; k < Candidatos.size() and Mal; k++){
-                if(!(Candidatos[i].i != Candidatos[j].i and Candidatos[k].i != Candidatos[j].i and Candidatos[k].i != Candidatos[i].i and (int)Candidatos[i].Vuelve + (int)Candidatos[j].Vuelve + (int)Candidatos[k].Vuelve >= 2 and (int)Candidatos[i].Usar + (int)Candidatos[j].Usar + (int)Candidatos[k].Usar == 1)) continue;
-                vector<int> Posibles = {i, j, k};
-                sort(Posibles.begin(), Posibles.end());
-                do{
-                    int i0 = Posibles[0], j0 = Posibles[1], k0 = Posibles[2];
-                    if(Candidatos[i0].Vuelve and Candidatos[i0].Usar and (Hoja[Grafo[Nodo][Candidatos[j0].i]] or !Candidatos[j0].Usar) and Candidatos[j0].Vuelve){
-                        Mal = 0;
-                        Retorno.Mayor_y_no_vuelvo += Candidatos[i0].Valor + Candidatos[j0].Valor + Candidatos[k0].Valor;
-                        Retorno.Seguir_si_no_vuelvo = {{Candidatos[i0].i, Candidatos[i0].Usar}, {Candidatos[j0].i, Candidatos[j0].Usar}, {Candidatos[k0].i, Candidatos[k0].Usar}};
-                        break;
-                    }
-                } while(next_permutation(Posibles.begin(), Posibles.end()));
-            }
-        }
-    }
-    if(Mal){
-        for(i = 0; i < Candidatos.size() and Mal; i++){
-            for(int j = i + 1; j < Candidatos.size() and Mal; j++){
-                if(Candidatos[i].i != Candidatos[j].i and (int)Candidatos[i].Vuelve + (int)Candidatos[j].Vuelve >= 1 and (int)Candidatos[i].Usar + (int)Candidatos[j].Usar == 1){
-                    if(Candidatos[i].Usar and Candidatos[i].Vuelve and (Hoja[Grafo[Nodo][Candidatos[j].i]] or !Candidatos[j].Usar)){
-                        Retorno.Mayor_y_no_vuelvo += Candidatos[i].Valor + Candidatos[j].Valor;
-                        Retorno.Seguir_si_no_vuelvo = {{Candidatos[i].i, Candidatos[i].Usar}, {Candidatos[j].i, Candidatos[j].Usar}};
-                        Mal = 0;
-                        break;
-                    }
-                    swap(i, j);
-                    if(Candidatos[i].Usar and Candidatos[i].Vuelve and (Hoja[Grafo[Nodo][Candidatos[j].i]] or !Candidatos[j].Usar)){
-                        Retorno.Mayor_y_no_vuelvo += Candidatos[i].Valor + Candidatos[j].Valor;
-                        Retorno.Seguir_si_no_vuelvo = {{Candidatos[i].i, Candidatos[i].Usar}, {Candidatos[j].i, Candidatos[j].Usar}};
-                        Mal = 0;
-                        break;
-                    }
-                    swap(i, j);
-                }
-            }
-        }
-        if(Mal){
-            Retorno.Mayor_y_no_vuelvo += Candidatos[0].Valor;
-            Retorno.Seguir_si_no_vuelvo = {{Candidatos[0].i, Candidatos[0].Usar}};
-        }
-    }
-    Mal = 1;
-    for(i = 0; i < Candidatos.size() and Mal; i++){
-        for(int j = i + 1; j < Candidatos.size() and Mal; j++){
-            if(Candidatos[i].Vuelve and Candidatos[j].Vuelve and (int)Candidatos[i].Usar + (int)Candidatos[j].Usar == 1){
-                Mal = 0;
-                Retorno.Mayor_y_vuelvo += Candidatos[i].Valor + Candidatos[j].Valor;
-                Retorno.Seguir_si_vuelvo = {{Candidatos[i].i, Candidatos[i].Usar}, {Candidatos[j].i, Candidatos[j].Usar}};
-                if(Candidatos[j].Usar) swap(Retorno.Seguir_si_vuelvo[0], Retorno.Seguir_si_vuelvo[1]);
-                break;
-            }
-        }
-    }
-    if(Mal){
-        for(i = 0; i < Candidatos.size(); i++){
-            if(Candidatos[i].Vuelve and Candidatos[i].Usar){
-                Retorno.Mayor_y_vuelvo += Candidatos[i].Valor;
-                Retorno.Seguir_si_vuelvo = {{Candidatos[i].i, Candidatos[i].Usar}};
-                break;
-            }
-        }
-    }
-    Retorno.Mejor = max(Retorno.Mayor_y_vuelvo, Retorno.Mayor_y_no_vuelvo);
-    Retorno.Volver = Retorno.Mayor_y_vuelvo >= Retorno.Mayor_y_no_vuelvo;
-    return PD[Nodo][Me_usaron > 0 ? 1 : 0] = Retorno;
-}
-//bool Final = 0;
-void Recuperar(int Nodo, int Anterior, bool Me_usaron){
-    auto Actual = PD[Nodo][Me_usaron > 0 ? 1 : 0];
-    cerr<<Nodo + 1<<" "<<Anterior + 1<<" "<<Me_usaron<<" Actual.\n**\n";
-    for(auto E: Actual.Seguir_si_vuelvo){
-        cerr<<Grafo[Nodo][E.first] + 1<<" "<<E.second<<"\n";
-    }
-    cerr<<"**\n";
-    for(auto E: Actual.Seguir_si_vuelvo){
-        cerr<<Grafo[Nodo][E.first] + 1<<" "<<E.second<<"\n";
-    }
-    cerr<<"****\n";
-    if(Hoja[Nodo]){
-        Recorrer.push_back(Nodo);
-        Visitados[Nodo] = 1;
-        return;
-    }
-    if(Me_usaron){
-        Recorrer.push_back(Nodo);
-        Visitados[Nodo] = 1;
-    }
-    set<int> No_ir;
-    if(Actual.Volver) for(auto E: Actual.Seguir_si_vuelvo) No_ir.insert(E.first);
-    else for(auto E: Actual.Seguir_si_no_vuelvo) No_ir.insert(E.first);
-    for(int i = 0; i < Grafo[Nodo].size(); i++){
-        if(Grafo[Nodo][i] == Anterior or No_ir.count(i)) continue;
-        if(!Visitados[Grafo[Nodo][i]]) Recorrer.push_back(Grafo[Nodo][i]);
-        Visitados[Grafo[Nodo][i]] = 1;
-    }
-    int i = 0;
-    if(Actual.Volver){
-        for(auto E: Actual.Seguir_si_vuelvo){
-            //cerr<<"Llego.\n";
-            if(i == 1 and !Visitados[Nodo]){
-                Recorrer.push_back(Nodo);
-                Visitados[Nodo] = 1;
-            }
-            cerr<<Grafo[Nodo][E.first] + 1<<" "<<Nodo + 1<<" "<<E.second<<" Ir\n";
-            Recuperar(Grafo[Nodo][E.first], Nodo, E.second);
-            i++;
-        }
-    } else {
-        for(auto E: Actual.Seguir_si_no_vuelvo){
-            if(i == 1 and !Visitados[Nodo]){
-                Recorrer.push_back(Nodo);
-                Visitados[Nodo] = 1;
-            }
-            cerr<<Grafo[Nodo][E.first] + 1<<" "<<Nodo + 1<<" "<<E.second<<" Ir\n";
-            Recuperar(Grafo[Nodo][E.first], Nodo, E.second);
-            //cerr<<"Llego.\n";
-            i++;
-        }
-    }
-    if(!Visitados[Nodo]) Recorrer.push_back(Nodo);
-    //if(!Me_usaron) Recorrer.push_back(Nodo);
-}
 int main(){
     ios_base::sync_with_stdio(0);
     cin.tie(0);
     int n, k;
     long long m = 0;
     cin>>n>>k;
+    Valor Nada;
+    Nada.Existo = 0;
+    PD.assign(n, vector<Valor>(2, Nada));
     Grafo.assign(n, {});
     v.assign(n, 0);
     d.assign(n, 2222222222222222);
     a.assign(n, -2);
-    Valor Nada;
-    Nada.Existo = 0;
-    PD.assign(n, vector<Valor>(2, Nada));
     Final.assign(n, 0);
     Hay = n;
     for(int i = 0; i < n - 1; i++){
-        int a, b;
-        cin>>a>>b;
-        a--;
-        b--;
-        Grafo[a].push_back(b);
-        Grafo[b].push_back(a);
+        int A, B;
+        cin>>A>>B;
+        A--;
+        B--;
+        Grafo[A].push_back(B);
+        Grafo[B].push_back(A);
     }
     for(int i = 0; i < n; i++){
         cin>>v[i];
@@ -297,7 +393,6 @@ int main(){
         return 0;
     }
     if(k == 3){
-        bitset<222222> Visitados;
         d[0] = v[0];
         DFS(0);
         vector<int> r;
@@ -323,19 +418,16 @@ int main(){
         for(auto E: r) cout<<E + 1<<" ";
         return 0;
     }
-    for(int i = 1; i < n; i++) if(Grafo[i].size() == 1) Hoja[i] = 1;
+    for(int i = 1; i < n; i++){
+        if(Grafo[i].size() == 1){
+            Hoja[i] = 1;
+            //cerr<<i + 1<<" Hoja.\n";
+        }
+    }
     auto Respuesta = Resolver(0, -2, 1);
-    /*cerr<<PD[1][0].Mayor_y_vuelvo<<" 2\n";
-    cerr<<PD[1][1].Mayor_y_vuelvo<<" 2\n";*/
-    //cerr<<Respuesta.Mayor_y_vuelvo<<" "<<Respuesta.Mayor_y_no_vuelvo<<" "<<Respuesta.Mayor_y_se_acaba_antes<<" ¿?\n";
-    //cerr<<"Terminado.\n";
-    cout<<Respuesta.Mejor<<"\n";
-    Recuperar(0, -2, 1);
-    cerr<<"-----------------------------------------------------------\n";
-    cerr<<PD[1][0].Mayor_y_vuelvo<<" "<<PD[1][0].Mayor_y_no_vuelvo<<"\n";
-    cerr<<PD[1][1].Mayor_y_vuelvo<<" "<<PD[1][1].Mayor_y_no_vuelvo<<"\n";
-    cerr<<"-----------------------------------------------------------\n";
-    cout<<Recorrer.size()<<"\n";
-    for(auto E: Recorrer) cout<<E + 1<<" ";
+    cout<<max(Respuesta.Mejor_y_vuelvo, Respuesta.Mejor_y_me_quedo)<<"\n";
+    Reconstruir(0, -2, 1, (Respuesta.Mejor_y_vuelvo > Respuesta.Mejor_y_me_quedo ? 1 : 0));
+    cout<<Recorrido.size()<<"\n";
+    for(auto E: Recorrido) cout<<E + 1<<" ";
     return 0;
 }
