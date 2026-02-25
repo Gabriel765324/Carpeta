@@ -4,9 +4,9 @@
         <attribute name="name" value="14"/>
         <attribute name="authors" value="USUARIO"/>
         <attribute name="about" value=""/>
-        <attribute name="saved" value="2026-02-22 07:45:17 p. m."/>
+        <attribute name="saved" value="2026-02-25 06:23:08 p. m."/>
         <attribute name="created" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzo0MjowMyBwLiBtLjszMDc4"/>
-        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yMjswNzo0NToxNyBwLiBtLjsxOzMxOTQ="/>
+        <attribute name="edited" value="VVNVQVJJTztERVNLVE9QLU4xQlA2QlY7MjAyNi0wMi0yNTswNjoyMzowOCBwLiBtLjsyOzMxOTM="/>
     </attributes>
     <function name="Main" type="None" variable="">
         <parameters/>
@@ -16,7 +16,14 @@
             <input variable="r"/>
             <input variable="d"/>
             <input variable="v"/>
-            <output expression="&quot;El rendimiento en kil&#243;metros por litro es de &quot;&amp;r / 2.352&amp;&quot; y cost&#243; &quot;&amp;(1 / (r * 1.60934 * (1 / d))) * v * 6.96&amp;&quot; bolivianos con el cambio oficial.&quot;" newline="True"/>
+            <if expression="r &lt;= 20 or r &gt;= 40 or d &lt;= 5000 or d &gt;= 10000 or v &lt;= 6 or v &gt;= 7">
+                <then>
+                    <output expression="&quot;Alg&#250;n dato no est&#225; en el rango especificado por el enunciado.&quot;" newline="True"/>
+                </then>
+                <else>
+                    <output expression="&quot;El rendimiento en kil&#243;metros por litro es de &quot;&amp;r / 2.352&amp;&quot; y cost&#243; &quot;&amp;(1 / (r * 1.60934 * (1 / d))) * v * 6.96&amp;&quot; bolivianos con el cambio oficial.&quot;" newline="True"/>
+                </else>
+            </if>
         </body>
     </function>
 </flowgorithm>
