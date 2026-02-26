@@ -1,6 +1,9 @@
 *.exe
 *.txt
 *.bin
+*.tar
+*.txt
+*.docx
 *.jpg
 *.xlsx
 *.pptx
