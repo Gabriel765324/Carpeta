@@ -1,130 +1,97 @@
 #include "bits/stdc++.h"
 using namespace std;
-struct Inicios{
-    int _ndice, Inicio, Final;
-    bool Ahora;
+struct Valor{
+    int Mayor_distancia_sin_m_, Respuesta_sin_m_, Profundidad, Mayor_distancia_conmigo, Respuesta_conmigo;
+    vector<int> Mesa;
 };
-struct Finales{
-    int _ndice, Final;
-};
-struct En_la_fila{
-    int Nodo;
-};
-bool operator<(const Inicios& a, const Inicios& b){
-    if(a.Inicio < b.Inicio) return 1;
-    if(a.Inicio > b.Inicio) return 0;
-    if(a.Ahora and !b.Ahora) return 1;
-    if(!a.Ahora and b.Ahora) return 0;
-    return a._ndice < b._ndice;
-}
-bool operator<(const Finales& a, const Finales& b){
-    if(a.Final < b.Final) return 1;
-    if(a.Final > b.Final) return 0;
-    return a._ndice < b._ndice;
-}
-vector< deque<int> > Grafo(300022), Mesa(300022);
-vector<int> Tama_os(300022), Respuestas(300022), Capa(300022), Mayor_componente(300022);
-set<Inicios> Por_a_dir;
-set<Finales> Por_borrar;
-bool operator<(const En_la_fila& a, const En_la_fila& b){
-    if(Capa[a.Nodo] > Capa[b.Nodo]) return 1;
-    if(Capa[a.Nodo] < Capa[b.Nodo]) return 0;
-    return a.Nodo < b.Nodo;
-}
-set<En_la_fila> Cola;
-int DFS(int Nodo, int Anterior){
-    if(Nodo != 0){
-        Capa[Nodo] = Capa[Anterior] + 1;
-        Mesa[Nodo].push_back(Anterior);
-        int Actual = Anterior;
-        for(int i = 0; i < Mesa[Actual].size(); i++){
-            Mesa[Nodo].push_back(Mesa[Actual][i]);
-            Actual = Mesa[Actual][i];
+vector< vector<int> > Grafo;
+vector<Valor> PD;
+void Resolver(int Nodo){
+    PD[Nodo].Profundidad = 0;
+    PD[Nodo].Mayor_distancia_sin_m_ = 0;
+    if(Grafo[Nodo].empty()){
+        PD[Nodo].Mayor_distancia_conmigo = 1;
+        PD[Nodo].Mayor_distancia_sin_m_ = 0;
+        PD[Nodo].Profundidad = 1;
+        PD[Nodo].Respuesta_conmigo = Nodo;
+        PD[Nodo].Respuesta_sin_m_ = -2;
+        return;
+    }
+    int Profundo = -2;
+    pair<int, int> M_s_profundos = {-2, -2}, Profundidades_de_los_m_s_profundos = {-2, -2};
+    for(auto E: Grafo[Nodo]){
+        Resolver(E);
+        if(PD[E].Profundidad + 1 > PD[Nodo].Profundidad){
+            PD[Nodo].Profundidad = PD[E].Profundidad + 1;
+            Profundo = E;
+        }
+        if(PD[E].Profundidad > Profundidades_de_los_m_s_profundos.second){
+            Profundidades_de_los_m_s_profundos.second = PD[E].Profundidad;
+            M_s_profundos.second = E;
+            if(Profundidades_de_los_m_s_profundos.first < Profundidades_de_los_m_s_profundos.second){
+                swap(Profundidades_de_los_m_s_profundos.first, Profundidades_de_los_m_s_profundos.second);
+                swap(M_s_profundos.first, M_s_profundos.second);
+            }
+        }
+        if(PD[E].Mayor_distancia_conmigo > PD[Nodo].Mayor_distancia_sin_m_){
+            PD[Nodo].Mayor_distancia_sin_m_ = PD[E].Mayor_distancia_conmigo;
+            PD[Nodo].Respuesta_sin_m_ = PD[E].Respuesta_conmigo;
+        }
+        if(PD[E].Mayor_distancia_sin_m_ > PD[Nodo].Mayor_distancia_sin_m_){
+            PD[Nodo].Mayor_distancia_sin_m_ = PD[E].Mayor_distancia_sin_m_;
+            PD[Nodo].Respuesta_sin_m_ = PD[E].Respuesta_sin_m_;
         }
     }
-    int Tama_o = 1;
-    for(auto E: Grafo[Nodo]){
-        if(E == Anterior) continue;
-        int Extrita = DFS(E, Nodo);
-        Tama_o += Extrita;
-        Mayor_componente[Nodo] = max(Mayor_componente[Nodo], Extrita);
+    int Anterior = Profundo;
+    PD[Nodo].Mesa.push_back(Anterior);
+    for(int i = 0; i < PD[Anterior].Mesa.size(); i++){
+        PD[Nodo].Mesa.push_back(PD[Anterior].Mesa[i]);
+        Anterior = PD[Anterior].Mesa[i];
     }
-    return Tama_os[Nodo] = Tama_o;
-}
-bool V_lido(int a, int b){
-    return max(Tama_os[a] - Tama_os[b], Mayor_componente[b]) <= Tama_os[a] / 2;
-}
-void Calcular(int Nodo, int Anterior){
-    if(Nodo != 0 and Grafo[Nodo].size() == 1){
-        En_la_fila A_adir;
-        A_adir.Nodo = Nodo;
-        Cola.insert(A_adir);
+    PD[Nodo].Mesa = PD[Nodo].Mesa;
+    if(Grafo[Nodo].size() == 1){
+        int Consulta = PD[Nodo].Profundidad / 2, Actual = Nodo;
+        while(Consulta > 0){
+            int i = 0, d = 30, m = i;
+            while(1){
+                int p = (i + d) / 2;
+                if(Consulta - (1<<(p + 1)) >= 0){
+                    m = p;
+                    i = p + 1;
+                } else d = p - 1;
+                if(i >= d) break;
+            }
+            m = min((int)PD[Actual].Mesa.size() - 1, m);
+            Actual = PD[Actual].Mesa[m];
+            Consulta -= (1<<m);
+        }
+        PD[Nodo].Respuesta_conmigo = Actual;
+        PD[Nodo].Mayor_distancia_conmigo = PD[Nodo].Profundidad;
+        return;
     }
-    for(auto E: Grafo[Nodo]){
-        if(E == Anterior) continue;
-        Calcular(E, Nodo);
+    if(Profundidades_de_los_m_s_profundos.first == Profundidades_de_los_m_s_profundos.second){
+        PD[Nodo].Respuesta_conmigo = Nodo;
+        PD[Nodo].Mayor_distancia_conmigo = Profundidades_de_los_m_s_profundos.first + Profundidades_de_los_m_s_profundos.second + 1;
+        return;
     }
-    Grafo[Nodo].clear();
-    Inicios Nuevo;
-    if(Nodo == 0 and V_lido(0, 0)){
-        Nuevo.Inicio = 0;
-        Nuevo.Final = 0;
-        Nuevo._ndice = 0;
-        Nuevo.Ahora = 1;
-        Por_a_dir.insert(Nuevo);
-    }
-    if(Nodo == 0) return;
-    int Inicio = Nodo, Final = -2, Nodo_actual = Nodo;
-    while(Nodo_actual != 0){
-        int i = 0, d = Mesa[Nodo_actual].size() - 1, m = 0;
-        bool Seguir = 1;
+    int Consulta = (Profundidades_de_los_m_s_profundos.first + Profundidades_de_los_m_s_profundos.second + 1) / 2 - Profundidades_de_los_m_s_profundos.second, Actual = Nodo;
+    if((Profundidades_de_los_m_s_profundos.first + Profundidades_de_los_m_s_profundos.second) % 2 == 1) Consulta--;
+    while(Consulta > 0){
+        int i = 0, d = 30, m = i;
         while(1){
             int p = (i + d) / 2;
-            if(Tama_os[Mesa[Nodo_actual][p]] < Mayor_componente[Nodo] * 2){
-                i = p + 1;
+            if(Consulta - (1<<(p + 1)) >= 0){
                 m = p;
-            } else {
-                d = p - 1;
-                Seguir = 0;
-            }
-            if(i >= d + 1) break;
-        }
-        Inicio = Mesa[Nodo_actual][m];
-        if(Seguir) Nodo_actual = Mesa[Nodo_actual].back();
-        else {
-            Nodo_actual = Mesa[Nodo_actual][m];
-            break;
-        }
-    }
-    Final = Inicio;
-    Nodo_actual = Inicio;
-    while(Nodo_actual != 0){
-        int i = 0, d = Mesa[Nodo_actual].size() - 1, m = 0;
-        bool Seguir = 1;
-        while(1){
-            int p = (i + d) / 2;
-            if(V_lido(Mesa[Nodo_actual][p], Nodo)){
                 i = p + 1;
-                m = p;
-            } else {
-                d = p - 1;
-                Seguir = 0;
-            }
-            if(i >= d + 1) break;
+            } else d = p - 1;
+            if(i >= d) break;
         }
-        Final = Mesa[Nodo_actual][m];
-        if(Seguir) Nodo_actual = Mesa[Nodo_actual].back();
-        else {
-            Nodo_actual = Mesa[Nodo_actual][m];
-            break;
-        }
+        m = min((int)PD[Actual].Mesa.size() - 1, m);
+        Actual = PD[Actual].Mesa[m];
+        Consulta -= (1<<m);
     }
-    Nuevo.Ahora = V_lido(Nodo, Nodo);
-    Nuevo._ndice = Nodo;
-    Nuevo.Inicio = Inicio;
-    Nuevo.Final = Final;
-    //cerr<<Nuevo._ndice<<" "<<Nuevo.Inicio<<" "<<Nuevo.Final<<" "<<Nuevo.Ahora<<"\n";
-    Por_a_dir.insert(Nuevo);
+    PD[Nodo].Respuesta_conmigo = Actual;
+    PD[Nodo].Mayor_distancia_conmigo = Profundidades_de_los_m_s_profundos.first + Profundidades_de_los_m_s_profundos.second + 1;
     return;
 }
 int main(){
@@ -132,79 +99,22 @@ int main(){
     cin.tie(0);
     int n, m;
     cin>>n>>m;
-    /*Grafo.assign(n, {});
-    Mesa.assign(n, {});
-    Tama_os.assign(n, -2);
-    Capa.assign(n, 0);
-    Mayor_componente.assign(n, 0);*/
-    for(int i = 0; i < n - 1; i++){
+    Grafo.assign(n, {});
+    PD.assign(n, {});
+    for(int i = 0; i < n - 1; ){
         int a;
         cin>>a;
-        Grafo[a - 1].push_back(i + 1);
-        Grafo[i + 1].push_back(a - 1);
+        a--;
+        i++;
+        Grafo[a].push_back(i);
     }
-    int Nada = DFS(0, -2);
-    for(int i = 0; i < n; i++) Mesa[i].push_front(i);
-    /*for(int i = 0; i < n; i++){
-        cerr<<i<<"\n";
-        for(auto E: Mesa[i]) cerr<<E<<" ";
-        cerr<<"\n";
-    }*/
-    Calcular(0, -2);
-    for(int i = 0; i < n; i++) while(Mesa[i].size() > 2) Mesa[i].pop_back();
-    Grafo.clear();
-    Tama_os.clear();
-    Mayor_componente.clear();
-    //Respuestas.assign(n, -2);
-    while(!Cola.empty()){
-        int Nodo = Cola.begin()->Nodo;
-        Cola.erase(Cola.begin());
-        Inicios Buscar;
-        Buscar.Ahora = 1;
-        Buscar.Inicio = Nodo;
-        Buscar.Final = -2;
-        Buscar._ndice = -2;
-        for(auto E = Por_a_dir.lower_bound(Buscar); E != Por_a_dir.end(); E = Por_a_dir.lower_bound(Buscar)){
-            if(E->Ahora and E->_ndice == Nodo){
-                Finales Respuesta_nueva;
-                Respuesta_nueva.Final = E->Final;
-                Respuesta_nueva._ndice = E->_ndice;
-                //cerr<<Nodo<<" "<<Respuesta_nueva._ndice<<" "<<Respuesta_nueva.Final<<" Añadir.\n";
-                Por_borrar.insert(Respuesta_nueva);
-                Por_a_dir.erase(E);
-            } else break;
-        }
-        Buscar.Ahora = 0;
-        Respuestas[Nodo] = Por_borrar.begin()->_ndice + 1;
-        for(auto E = Por_a_dir.lower_bound(Buscar); E != Por_a_dir.end(); E = Por_a_dir.lower_bound(Buscar)){
-            if(E->Inicio == Nodo){
-                Finales Respuesta_nueva;
-                Respuesta_nueva.Final = E->Final;
-                Respuesta_nueva._ndice = E->_ndice;
-                //cerr<<Nodo<<" "<<Respuesta_nueva._ndice<<" "<<Respuesta_nueva.Final<<" Añadir 2.\n";
-                Por_borrar.insert(Respuesta_nueva);
-                Por_a_dir.erase(E);
-            } else break;
-        }
-        Finales Eliminable;
-        Eliminable.Final = Nodo;
-        Eliminable._ndice = -2;
-        for(auto E = Por_borrar.lower_bound(Eliminable); E != Por_borrar.end(); E = Por_borrar.lower_bound(Eliminable)){
-            if(E->Final == Nodo){
-                //cerr<<Nodo<<" "<<E->_ndice<<" Borrar.\n";
-                Por_borrar.erase(E);
-            } else break;
-        }
-        if(Nodo != 0){
-            En_la_fila Nodo_nuevo_para_la_fila;
-            Nodo_nuevo_para_la_fila.Nodo = Mesa[Nodo][1];
-            Cola.insert(Nodo_nuevo_para_la_fila);
-        }
-    }
+    Resolver(0);
     while(m--){
         int a;
         cin>>a;
-        cout<<Respuestas[a - 1]<<"\n";
+        a--;
+        if(PD[a].Mayor_distancia_conmigo > PD[a].Mayor_distancia_sin_m_) cout<<PD[a].Respuesta_conmigo + 1<<"\n";
+        else cout<<PD[a].Respuesta_sin_m_ + 1<<"\n";
     }
     return 0;
 }
