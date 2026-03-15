@@ -48,8 +48,7 @@ long long Crear(int Nodo, int Anterior){
         if(E != Anterior){
             Arreglos[Nodo].push_back(S(Crear(E, Nodo), 1));
             p = M(p, Arreglos[Nodo].back());
-        }
-        else {
+        } else {
             Arreglos[Nodo].push_back(1 % m);
         }
     }
