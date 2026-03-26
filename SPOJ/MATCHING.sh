@@ -1,2 +1,0 @@
-g++ MATCHING.cpp -o MATCHING.exe
-./MATCHING.exe

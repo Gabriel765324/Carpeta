@@ -1,2 +1,0 @@
-g++ FASTFLOW.cpp -o FASTFLOW.exe
-./FASTFLOW.exe
