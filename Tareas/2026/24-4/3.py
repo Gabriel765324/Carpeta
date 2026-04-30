@@ -1,7 +1,4 @@
-Lista = [0, 0, 0]
-Lista[0] = float(input("Dé un número.\n"))
-Lista[1] = float(input("Dé un número.\n"))
-Lista[2] = float(input("Dé un número.\n"))
+Lista = [float(input("Dé un número.\n")), float(input("Dé un número.\n")), float(input("Dé un número.\n"))]
 if Lista[0] == Lista[1] or Lista[1] == Lista[2] or Lista[2] == Lista[0]:
     print("No es válido.")
     exit(0)

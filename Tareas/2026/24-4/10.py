@@ -10,4 +10,5 @@ while i < d + 1:
         m = p
     else:
         i = p + 1
-print("La ciudad B superará a la ciudad A en algún momento de", str(d + 2023) + ".")
+    print(i, d, p, m)
+print(f"La ciudad B superará a la ciudad A en algún momento de {m + 2022}.")

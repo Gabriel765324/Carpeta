@@ -10,5 +10,4 @@ for i in range(n):
         d += k * 0.92
     else:
         d += k * 0.95
-print("Total:", v)
-print("Total con descuento:", d)
+print(f"Total: {v}.\nTotal con descuento: {d}.")

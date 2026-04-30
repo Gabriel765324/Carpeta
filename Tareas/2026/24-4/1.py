@@ -4,5 +4,7 @@ c = float(input("¿Cuál es el término independiente?\n"))
 b *= -1
 if b ** 2 - 4 * a * c < 0:
     print("Las soluciones son complejas.")
+elif b ** 2 - 4 * a * c == 0:
+    print((b + (b ** 2 - 4 * a * c) ** 0.5) / 2 / a)
 else:
     print((b + (b ** 2 - 4 * a * c) ** 0.5) / 2 / a, (b - (b ** 2 - 4 * a * c) ** 0.5) / 2 / a)
