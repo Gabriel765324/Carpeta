@@ -5,9 +5,9 @@ for i in range(n):
     h = float(input("¿Cuántas horas trabajó?\n"))
     if h <= 40:
         p += h * t
-        print("El pago es", str(h * t) + ".")
+        print(f"El pago es {h * t}.")
     else:
         p += (40 + (h - 40) * 2) * t
-        print("El pago es", str((40 + (h - 40) * 2) * t) + ".")
-print("Pago total:", p)
-print("Dinero retenido:", p * 0.05 / 0.95)
+        print(f"El pago es {(40 + (h - 40) * 2) * t}.")
+print(f"Pago total: {p}.")
+print(f"Dinero retenido: {p * 0.05 / 0.95}.")

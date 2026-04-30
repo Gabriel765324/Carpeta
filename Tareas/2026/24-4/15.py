@@ -7,3 +7,4 @@ while True:
         exit(0)
     s += n
     c += 1
+    print(s, c)

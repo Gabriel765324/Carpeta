@@ -5,4 +5,4 @@ for i in range(n):
     a = float(input("¿Cuál es la altura?\n"))
     h = float(input("¿Cuántos huevos puso?\n"))
     s += p * a / h / n
-print("La calidad promedio es", str(s) + ".")
+print(f"La calidad promedio es {s}.")
