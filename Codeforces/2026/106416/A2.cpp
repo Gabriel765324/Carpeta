@@ -5,91 +5,51 @@ long long Distanciar(long long a, long long b, long long l, bool Sentido){
     else return ((a - b) % l + l) % l;;
 }
 struct Rango{
-    long long i, f, l, i0, f0;
+    long long i, f, l;
     bool Sentido;
     Rango(long long I, long long F, long long L, bool S){
         i = I;
         f = F;
         l = L;
         Sentido = S;
-        i0 = -2LL;
-        f0 = -2LL;
         if(Sentido and i > f){
-            f0 = f;
-            f = l - 1LL;
-            i0 = 0LL;
+            i -= l;
         }
         if(!Sentido){
             if(i < f){
-                i0 = i;
-                f0 = 0LL;
-                i = l - 1LL;
+                i += l;
             }
         }
     }
     bool Contiene(const Rango& a){
         if(Sentido == a.Sentido){
-            
-            /*long long Final_real = (f0 == -2LL ? f : f0), Final_real_a = (a.f0 == -2LL ? a.f : a.f0);
-            long long di = Distanciar(i, Final_real, l, Sentido), da = Distanciar(a.i, Final_real_a, a.l, a.Sentido);
             if(Sentido){
-                bool Retorno = (i <= a.i and a.f <= f) or (a.i <= i and f <= a.f);
-                if(i0 != -2LL) Retorno = Retorno or (i0 <= a.i and a.f <= f0) or (i <= a.i and a.f <= f0);
-                if(a.i0 != -2LL) Retorno = Retorno or (a.i0 <= i and f <= a.f0) or (a.i <= i and f <= a.f0);
-                return Retorno;
+                return (i <= a.i and a.f <= f) or (a.i <= i and f <= a.f);
             } else {
-                bool Retorno = (i >= a.i and a.f >= f) or (a.i >= i and f >= a.f);
-                if(i0 != -2LL) Retorno = Retorno or (i0 >= a.i and a.f >= f0) or (i0 >= a.i and a.f >= f);
-                if(a.i0 != -2LL) Retorno = Retorno or (a.i0 >= i and f >= a.f0) or (a.i0 >= i and f >= a.f);
-                return Retorno;
-            }*/
-            //if(di == da) return 0;
-            /*if(Sentido){
-                if(di >= da){
-                    long long Inicio = Final_real_a, Final = Inicio;
-                    Rango Actual = Rango(Inicio, Final, l, 1);
-                    return ((Actual.i <= Final_real and Final_real <= Actual.f) or (Actual.i0 <= Final_real and Final_real <= Actual.f0)) and ((i <= a.i and a.i <= f) or (i0 <= a.i and a.i <= f0));
-                } else {
-                    long long Inicio = Final_real, Final = a.i;
-                    Rango Actual = Rango(Inicio, Final, l, 1);
-                    return (Actual.i <= Final_real_a and Final_real_a <= Actual.f) or (Actual.i0 <= Final_real_a and Final_real_a <= Actual.f0) and ((a.i <= i and i <= a.f) or (a.i0 <= i and i <= a.f0));
-                }
-            } else {
-                if(di >= da){
-                    long long Inicio = Final_real_a, Final = i;
-                    Rango Actual = Rango(Inicio, Final, l, 0);
-                    return (Actual.i >= Final_real and Final_real >= Actual.f) or (Actual.i0 >= Final_real and Final_real >= Actual.f0) and ((i >= a.i and a.i >= f) or (i0 >= a.i and a.i >= f0));
-                } else {
-                    long long Inicio = Final_real, Final = a.i;
-                    Rango Actual = Rango(Inicio, Final, l, 0);
-                    return (Actual.i >= Final_real_a and Final_real_a >= Actual.f) or (Actual.i0 >= Final_real_a and Final_real_a >= Actual.f0) and ((a.i >= i and i >= a.f) or (a.i0 >= i and i >= a.f0));
-                }
-            }*/
+                return (i >= a.i and a.f >= f) or (a.i >= i and f >= a.f);
+            }
         } else {
+            long long ni = (i % l + l) % l, nf = (f % l + l) % l, nai = (a.i % l + l) % l, naf = (a.f % l + l) % l;
             if(a.Sentido){
-                for(auto E: {i, f, i0, f0}){
+                for(auto E: {ni, nf}){
                     if(E == -2LL) continue;
-                    if(a.i <= E and E <= a.f) return 1;
-                    if(a.i0 <= E and E <= a.f0 and a.i0 != -2LL) return 1;
+                    if(nai <= E and E <= naf) return 1;
                 }
             } else {
-                for(auto E: {i, f, i0, f0}){
+                for(auto E: {ni, nf}){
                     if(E == -2LL) continue;
-                    if(a.i >= E and E >= a.f) return 1;
-                    if(a.i0 >= E and E >= a.f0 and a.i0 != -2LL) return 1;
+                    if(nai >= E and E >= naf) return 1;
                 }
             }
             if(Sentido){
-                for(auto E: {a.i, a.f, a.i0, a.f0}){
+                for(auto E: {nai, naf}){
                     if(E == -2LL) continue;
-                    if(i <= E and E <= f) return 1;
-                    if(i0 <= E and E <= f0 and i0 != -2LL) return 1;
+                    if(ni <= E and E <= nf) return 1;
                 }
             } else {
-                for(auto E: {a.i, a.f, a.i0, a.f0}){
+                for(auto E: {nai, naf}){
                     if(E == -2LL) continue;
-                    if(i >= E and E >= f) return 1;
-                    if(i0 >= E and E >= f0 and i0 != -2LL) return 1;
+                    if(ni >= E and E >= nf) return 1;
                 }
             }
             return 0;
