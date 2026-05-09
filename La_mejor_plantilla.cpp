@@ -50,6 +50,7 @@
 #define subcadena substr
 #define conseguir_l_nea getline
 #define par pair
+#define hacer_par make_pair
 #define finl endl
 #define tama_o size
 #define tama_o_de sizeof
@@ -77,6 +78,10 @@
 #define privado private
 #define p_blico public
 #define permutaci_n_previa prev_permutation
+#define falso false
+#define verdadero true
+#define revertir reverse
+#define llenar fill
 definir_tipo int entero;
 definir_tipo long long largo_largo;
 definir_tipo long int entero_largo;
