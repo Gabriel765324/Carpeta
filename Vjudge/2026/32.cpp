@@ -13,32 +13,45 @@
 #define di deque<int>
 #define pf push_front
 using namespace std;
+vector< vi > Grafo;
+vi Emparejado;
+bitset<222> Visitados, Nada;
+bool DFS(int Nodo){
+    Visitados[Nodo] = 1;
+    for(auto E: Grafo[Nodo]){
+        if(Emparejado[E] == -2){
+            Emparejado[E] = Nodo;
+            return 1;
+        }
+        if(Visitados[Emparejado[E]]) continue;
+        bool Posible = DFS(Emparejado[E]);
+        if(Posible){
+            Emparejado[E] = Nodo;
+            return 1;
+        }
+    }
+    return 0;
+}
 void Resolver(){
     int n;
     cin>>n;
-    unsigned ll Llevo = 0, Temporal;
-    vector<unsigned ll> a(n);
-    bitset<122> Usados;
+    Grafo.assign(n + 60, {});
+    Emparejado.assign(n + 60, -2);
     forn(i, n){
-        cin>>a[i];
-    }
-    forn(i, n){
-        Temporal = Llevo | a[i];
-        int Ganancia = - (int)__popcount(~(~a[i] | Llevo));
-        bitset<122> Posible;
-        forn(j, n){
-            if(Usados[j]) continue;
-            if((int)__popcount(~(~a[j] | Temporal)) == 0){
-                Posible[j] = 1;
-                Ganancia++;
+        ll a;
+        cin>>a;
+        for(long long j = 0; j < 60LL; j++){
+            if(a & (1LL<<j)){
+                Grafo[i].push_back(j + n);
             }
         }
-        if(Ganancia >= 0){
-            Llevo = Temporal;
-            Usados |= Posible;
-        }
     }
-    cout<<(int)Usados.count() - (int)__popcount(Llevo)<<el;
+    int Respuesta = n;
+    forn(i, n){
+        Respuesta -= (DFS(i) ? 1 : 0);
+        Visitados &= Nada;
+    }
+    cout<<Respuesta<<el;
 }
 int main(){
     ios_base::sync_with_stdio(0);
