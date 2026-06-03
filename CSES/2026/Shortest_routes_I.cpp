@@ -33,7 +33,6 @@
 #define vac_o empty
 #define cola_de_prioridad priority_queue
 #define m_s_grande greater
-#define menos less
 #define primero first
 #define segundo second
 #define estructura struct
@@ -92,16 +91,6 @@
 #define POCO LLONG_MIN
 #define conjunto_de_bits bitset
 #define asignar assign
-#define ra_z_cuadrada sqrt
-#define freabrir freopen
-#define si_transmisi_n_en_vivo ifstream
-#define de_transmisi_n_en_vivo ofstream
-#define est__abierto is_open
-#define cerrar close
-#define conseguir get
-#define techo ceil
-#define piso floor
-#define redondear round
 definir_tipo int entero;
 definir_tipo long long largo_largo;
 definir_tipo long int entero_largo;
@@ -116,11 +105,49 @@ definir_tipo unsigned long long no_signeado_largo_largo;
 definir_tipo unsigned long int no_signeado_entero_largo;
 definir_tipo unsigned short int no_signeado_entero_corto;
 definir_tipo unsigned __int128 no_signeado___entero128;
-definir_tipo bool booleano;
 usando espacio_de_nombre std;
+estructura Arista{
+    entero v;
+    largo_largo Peso;
+    Arista(entero b, largo_largo p){
+        v = b;
+        Peso = p;
+    }
+};
+bool operador<(constante Arista& a, constante Arista& b){
+    si(a.Peso < b.Peso) retornar 1;
+    si(a.Peso > b.Peso) retornar 0;
+    retornar a.v < b.v;
+}
 entero principal(){
     base_de_ios::sincronizar_con_stdio(0);
     centrada.empate(NULO);
-
+    entero n, m;
+    centrada>>n>>m;
+    conjunto<Arista> Cola;
+    vector< vector<Arista> > Grafo(n);
+    mientras(m--){
+        entero a, b;
+        largo_largo c;
+        centrada>>a>>b>>c;
+        a--;
+        b--;
+        Grafo[a].empujar_atr_s(Arista(b, c));
+    }
+    vector<largo_largo> Distancias(n, MUCHO);
+    Distancias[0] = 0LL;
+    Cola.insertar(Arista(0, 0LL));
+    mientras(!Cola.vac_o()){
+        entero Nodo = Cola.inicio()->v;
+        largo_largo Distancia = Cola.inicio()->Peso;
+        Cola.borrar(Cola.inicio());
+        si(Distancia > Distancias[Nodo]) continuar;
+        para(autom_tico E: Grafo[Nodo]){
+            si(Distancias[E.v] <= Distancia + E.Peso) continuar;
+            Distancias[E.v] = Distancia + E.Peso;
+            Cola.insertar(Arista(E.v, Distancias[E.v]));
+        }
+    }
+    para(autom_tico E: Distancias) csalida<<E<<" ";
     retornar 0;
 }

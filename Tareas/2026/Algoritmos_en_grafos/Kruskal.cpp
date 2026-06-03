@@ -33,7 +33,6 @@
 #define vac_o empty
 #define cola_de_prioridad priority_queue
 #define m_s_grande greater
-#define menos less
 #define primero first
 #define segundo second
 #define estructura struct
@@ -93,15 +92,8 @@
 #define conjunto_de_bits bitset
 #define asignar assign
 #define ra_z_cuadrada sqrt
-#define freabrir freopen
-#define si_transmisi_n_en_vivo ifstream
-#define de_transmisi_n_en_vivo ofstream
-#define est__abierto is_open
-#define cerrar close
-#define conseguir get
 #define techo ceil
 #define piso floor
-#define redondear round
 definir_tipo int entero;
 definir_tipo long long largo_largo;
 definir_tipo long int entero_largo;
@@ -118,9 +110,49 @@ definir_tipo unsigned short int no_signeado_entero_corto;
 definir_tipo unsigned __int128 no_signeado___entero128;
 definir_tipo bool booleano;
 usando espacio_de_nombre std;
+vector<entero> Representantes;
+estructura Arista{
+    entero a, b;
+    largo_largo c;
+    Arista(){}
+    booleano operador<(constante Arista& o){
+        si(c < o.c) retornar 1;
+        si(c > o.c) retornar 0;
+        si(a < o.a) retornar 1;
+        si(a > o.a) retornar 0;
+        retornar b < o.b;
+    }
+};
+entero Buscar(entero a){
+    si(Representantes[a] == a) retornar a;
+    retornar Representantes[a] = Buscar(Representantes[a]);
+}
+booleano Unir(entero a, entero b){
+    a = Buscar(a);
+    b = Buscar(b);
+    si(a != b){
+        Representantes[b] = a;
+        retornar 1;
+    }
+    retornar 0;
+}
 entero principal(){
     base_de_ios::sincronizar_con_stdio(0);
     centrada.empate(NULO);
-
+    entero n, m;
+    cerror<<"Dé el número de nodos y el número de aristas.\n";
+    centrada>>n>>m;
+    para(entero i = 0; i < n; i++) Representantes.empujar_atr_s(i);
+    vector<Arista> Aristas(m);
+    para(entero i = 0; i < m; i++){
+        cerror<<"Dé los nodos unidos por la arista y su peso.\n";
+        centrada>>Aristas[i].a>>Aristas[i].b>>Aristas[i].c;
+    }
+    ordenar(Aristas.inicio(), Aristas.fin());
+    para(autom_tico E: Aristas){
+        si(Unir(E.a, E.b)){
+            csalida<<"Se debe usar la arista "<<E.a<<" -> "<<E.b<<" que tiene el peso "<<E.c<<".\n";
+        }
+    }
     retornar 0;
 }
