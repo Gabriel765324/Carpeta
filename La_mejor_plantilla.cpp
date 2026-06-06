@@ -5,6 +5,8 @@
 #define usando using
 #define espacio_de_nombre namespace
 #define cadena string
+#define tupla tuple
+#define intercambiar swap
 #define la_transmisi_n_en_vivo_de_cadena stringstream
 #define centrada cin
 #define csalida cout
@@ -34,6 +36,9 @@
 #define cola_de_prioridad priority_queue
 #define m_s_grande greater
 #define menos less
+#define mayor_o_igual greater_equal
+#define less_equal menor_o_igual
+#define plantilla template
 #define primero first
 #define segundo second
 #define estructura struct

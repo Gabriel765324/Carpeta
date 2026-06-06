@@ -5,6 +5,8 @@
 #define usando using
 #define espacio_de_nombre namespace
 #define cadena string
+#define tupla tuple
+#define intercambiar swap
 #define la_transmisi_n_en_vivo_de_cadena stringstream
 #define centrada cin
 #define csalida cout
@@ -33,6 +35,10 @@
 #define vac_o empty
 #define cola_de_prioridad priority_queue
 #define m_s_grande greater
+#define menos less
+#define mayor_o_igual greater_equal
+#define less_equal menor_o_igual
+#define plantilla template
 #define primero first
 #define segundo second
 #define estructura struct
@@ -92,8 +98,15 @@
 #define conjunto_de_bits bitset
 #define asignar assign
 #define ra_z_cuadrada sqrt
+#define freabrir freopen
+#define si_transmisi_n_en_vivo ifstream
+#define de_transmisi_n_en_vivo ofstream
+#define est__abierto is_open
+#define cerrar close
+#define conseguir get
 #define techo ceil
 #define piso floor
+#define redondear round
 definir_tipo int entero;
 definir_tipo long long largo_largo;
 definir_tipo long int entero_largo;
