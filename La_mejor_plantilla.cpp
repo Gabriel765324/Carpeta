@@ -37,7 +37,7 @@
 #define m_s_grande greater
 #define menos less
 #define mayor_o_igual greater_equal
-#define less_equal menor_o_igual
+#define menor_o_igual less_equal
 #define plantilla template
 #define primero first
 #define segundo second
