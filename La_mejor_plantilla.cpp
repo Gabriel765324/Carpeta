@@ -75,6 +75,7 @@
 #define romper break
 #define continuar continue
 #define caso case
+#define predeterminado default
 #define mapa_desordenado unordered_map
 #define conjunto_desordenado unordered_set
 #define atr_s back
