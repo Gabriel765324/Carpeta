@@ -1,15 +1,15 @@
 #include "bits/stdc++.h"
 using namespace std;
 struct Valor{
-    int v, M_scara, Capa;
+    long long v, M_scara, Capa;
     Valor(){
         v = -2;
     }
 };
 struct Nodo{
-    int i, Suma, o;
+    long long i, Suma, o;
     Nodo(){}
-    Nodo(int I){
+    Nodo(long long I){
         i = I;
         Suma = 0;
         o = 0;
@@ -19,28 +19,28 @@ struct Nodo{
     }
 };
 struct Arista{
-    int v, w;
+    long long v, w;
     Arista(){}
-    Arista(int V, int W){
+    Arista(long long V, long long W){
         v = V;
         w = W;
     }
 };
 vector< vector< vector< vector<Valor> > > > PD;
 vector< vector<Arista> > Grafo;
-vector< vector<int> > GrafoT;
+vector< vector<long long> > GrafoT;
 vector<Nodo> Nodos;
 bitset<22> Visitados;
-vector<int> NodosI;
-int n, m, t = 0;
-void DFS(int Nodo){
+vector<long long> NodosI;
+long long n, m, t = 0;
+void DFS(long long Nodo){
     Visitados[Nodo] = 1;
     Nodos[Nodo].i = Nodo;
     for(auto E: Grafo[Nodo]) if(!Visitados[E.v]) DFS(E.v);
     Nodos[Nodo].o = t;
     t++;
 }
-int Resolver(int M_scara, int Capa, int Tomado, int i){
+long long Resolver(long long M_scara, long long Capa, long long Tomado, long long i){
     if(M_scara == ((1<<n) - 1)){
         PD[M_scara][Capa][Tomado][i].M_scara = M_scara;
         PD[M_scara][Capa][Tomado][i].Capa = Capa;
@@ -53,11 +53,11 @@ int Resolver(int M_scara, int Capa, int Tomado, int i){
         return PD[M_scara][Capa][Tomado][i].v = Resolver(M_scara, Capa - 1, 0, 0);
     }
     if(PD[M_scara][Capa][Tomado][i].v != -2) return PD[M_scara][Capa][Tomado][i].v;
-    int Nodo = Nodos[i].i;
+    long long Nodo = Nodos[i].i;
     bool Tomable = (M_scara & (1<<i)) ? false : true;
     for(auto E: GrafoT[Nodo]){
         if(!Tomable) break;
-        int NodoE = NodosI[E];
+        long long NodoE = NodosI[E];
         //cerr<<i + 1<<": "<<Nodo + 1<<" -> "<<E + 1<<": "<<NodoE + 1<<"\n";
         Tomable = Tomable and ((M_scara & (1<<NodoE)) ? true : false);
     }
@@ -66,8 +66,8 @@ int Resolver(int M_scara, int Capa, int Tomado, int i){
         PD[M_scara][Capa][Tomado][i].Capa = Capa;
         return PD[M_scara][Capa][Tomado][i].v = Resolver(M_scara, Capa, Tomado, i + 1);
     }
-    int v0 = Resolver(M_scara, Capa, Tomado, i + 1), v1 = Resolver(M_scara | (1<<i), Capa, 1, i + 1) + Nodos[i].Suma * Capa;
-    if(v0 <= v1){
+    long long v0 = Resolver(M_scara, Capa, Tomado, i + 1), v1 = Resolver(M_scara | (1<<i), Capa, 1, i + 1) - Nodos[i].Suma * Capa;
+    if(v0 < v1){
         PD[M_scara][Capa][Tomado][i].M_scara = M_scara;
         PD[M_scara][Capa][Tomado][i].Capa = Capa;
         return PD[M_scara][Capa][Tomado][i].v = v0;
@@ -86,7 +86,7 @@ int main(){
     Nodos.assign(n, Nodo());
     NodosI.assign(n, 0);
     while(m--){
-        int a, b, c;
+        long long a, b, c;
         cin>>a>>b>>c;
         a--;
         b--;
@@ -101,18 +101,18 @@ int main(){
         }
         cerr<<"\n";
     }*/
-    for(int i = 0; i < n; i++) if(!Visitados[i]) DFS(i);
+    for(long long i = 0; i < n; i++) if(!Visitados[i]) DFS(i);
     sort(Nodos.begin(), Nodos.end());
-    for(int i = 0; i < n; i++) NodosI[Nodos[i].i] = i;
+    for(long long i = 0; i < n; i++) NodosI[Nodos[i].i] = i;
     /*for(auto E: Nodos) cerr<<E.i + 1<<" ";
     cerr<<"\n";*/
-    int Nada = Resolver(0, 21, 0, 0);
-    vector<int> Asignaci_n(n);
-    int M_scara_actual = 0, Capa_actual = 21, Tomado = 0, i = 0;
+    long long Nada = Resolver(0, 21, 0, 0);
+    vector<long long> Asignaci_n(n);
+    long long M_scara_actual = 0, Capa_actual = 21, Tomado = 0, i = 0;
     while(1){
         if(M_scara_actual == ((1<<n) - 1)) break;
-        int M_scara_siguiente = PD[M_scara_actual][Capa_actual][Tomado][i].M_scara;
-        int Capa_siguiente = PD[M_scara_actual][Capa_actual][Tomado][i].Capa;
+        long long M_scara_siguiente = PD[M_scara_actual][Capa_actual][Tomado][i].M_scara;
+        long long Capa_siguiente = PD[M_scara_actual][Capa_actual][Tomado][i].Capa;
         if(Capa_siguiente != Capa_actual){
             Capa_actual = Capa_siguiente;
             Tomado = 0;
