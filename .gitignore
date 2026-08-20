@@ -22,6 +22,8 @@
 *.json
 *.prob
 *.h
+*.lg4
+*.circ
 Codeforces/Problemas/Genera casos.cpp
 Codeforces/Good bye 2024/D.cpp
 Problemas/Genera casos.cpp
