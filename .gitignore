@@ -22,6 +22,7 @@
 *.json
 *.prob
 *.h
+!Librer_a.h
 *.lg4
 *.circ
 Codeforces/Problemas/Genera casos.cpp
