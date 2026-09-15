@@ -371,3 +371,26 @@ struct Fracci_n{
         return (ld)this->n / (ld)this->d;
     }
 };
+vll Ajuste_polinomial_entero(int n, vll a){
+    vector< vll > Ajuste;
+    Ajuste.pb(a);
+    while(1){
+        vll Nuevo;
+        forn(i, Ajuste.back().size() - 1){
+            Nuevo.pb(Ajuste.back()[i + 1] - Ajuste.back()[i]);
+        }
+        Ajuste.pb(Nuevo);
+        if(int(Nuevo.size()) == 1) break;
+    }
+    vll Secuencia;
+    forn(i, n){
+        if(i == int(Ajuste[0].size())){
+            Ajuste.back().pb(Ajuste.back().back());
+            for(int j = int(Ajuste.size()) - 2; j > -1; j--){
+                Ajuste[j].pb(Ajuste[j].back() + Ajuste[j + 1].back());
+            }
+        }
+        Secuencia.pb(Ajuste[0][i]);
+    }
+    return Secuencia;
+}
