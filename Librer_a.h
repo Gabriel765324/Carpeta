@@ -141,12 +141,12 @@ ld Entrada_real(){
 }
 vll Generar_vector_aleatorio_entero(int n, ll i, ll d){
     vll a(n);
-    forn(i, n) a[i] = Generar_n_mero_aleatorio_entero(i, d);
+    forn(k, n) a[k] = Generar_n_mero_aleatorio_entero(i, d);
     return a;
 }
 vld Generar_vector_aleatorio_real(int n, ld i, ld d){
     vld a(n);
-    forn(i, n) a[i] = Generar_n_mero_aleatorio_real(i, d);
+    forn(k, n) a[k] = Generar_n_mero_aleatorio_real(i, d);
     return a;
 }
 ld Promedio_entero(vll a){
