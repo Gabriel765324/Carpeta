@@ -3,22 +3,25 @@
 #include <ext/pb_ds/tree_policy.hpp>
 #define pb push_back
 #define forn(i, n) for(int i = 0; i < int(n); i++)
-#define vll vector<long long>
+#define vll vector<ll>
 #define vld vector<long double>
-typedef __int128 llllong;
+typedef __int128 i128;
 typedef long long ll;
 typedef long double ld;
 using namespace std;
 using namespace __gnu_pbds;
-template <class T> using ordered_set = tree<ll, null_type, less<ll>, rb_tree_tag, tree_order_statistics_node_update>;
-template <class T> using ordered_multiset = tree<ll, null_type, less_equal<ll>, rb_tree_tag, tree_order_statistics_node_update>;
+template <class T> using ordered_set = tree<T, null_type, less<T>, rb_tree_tag, tree_order_statistics_node_update>;
+template <class T> using ordered_multiset = tree<T, null_type, less_equal<T>, rb_tree_tag, tree_order_statistics_node_update>;
+random_device rd;
+mt19937_64 Semilla(rd());
+mt19937 Semilla_int(rd());
 struct Grande{
-    llllong v, m;
+    i128 v, m;
     Grande(ll a, ll b){
         v = a % b;
         m = b;
     }
-    Grande(llllong a, llllong b){
+    Grande(i128 a, i128 b){
         v = a % b;
         m = b;
     }
@@ -27,7 +30,7 @@ struct Grande{
     }
     Grande operator^(const ll& e){
         Grande Copia = *this;
-        if(e == 0) return Grande((llllong)1, m);
+        if(e == 0) return Grande((i128)1, m);
         if(e == 1) return Copia;
         Grande a = Copia ^ (e / 2LL);
         a = a * a * (Copia ^ (e & 1LL));
@@ -35,20 +38,14 @@ struct Grande{
     }
 };
 ll Generar_n_mero_aleatorio_entero(ll i, ll d){
-    random_device rd;
-    mt19937_64 Semilla(rd());
     uniform_int_distribution<ll> Aleatorizador(i, d);
     return Aleatorizador(Semilla);
 }
 int Generar_n_mero_aleatorio_entero_int(int i, int d){
-    random_device rd;
-    mt19937 Semilla(rd());
     uniform_int_distribution<int> Aleatorizador(i, d);
     return Aleatorizador(Semilla);
 }
 ld Generar_n_mero_aleatorio_real(ld i, ld d){
-    random_device rd;
-    mt19937_64 Semilla(rd());
     uniform_real_distribution<ld> Aleatorizador(i, d);
     return Aleatorizador(Semilla);
 }
@@ -62,11 +59,11 @@ bool Miller_Rabin(ll n){
     }
     forn(i, 22){
         Grande Base = Grande(Generar_n_mero_aleatorio_entero(2LL, n - 2LL), n) ^ d;
-        if(Base.v == (llllong)1 or Base.v == (llllong)(n - 1LL)) continue;
+        if(Base.v == (i128)1 or Base.v == (i128)(n - 1LL)) continue;
         bool Pasado = 0;
         forn(j, s - 1){
             Base = Base * Base;
-            if(Base.v == (llllong)(n - 1LL)){
+            if(Base.v == (i128)(n - 1LL)){
                 Pasado = 1;
                 break;
             }
@@ -76,11 +73,11 @@ bool Miller_Rabin(ll n){
     }
     return 1;
 }
-long long Sigma(long long x){
-    long long r = 1;
-    for(long long i = 2; i * i <= x; i++){
+ll Sigma(ll x){
+    ll r = 1;
+    for(ll i = 2; i * i <= x; i++){
         if(x % i != 0LL) continue;
-        long long Potencia = 1;
+        ll Potencia = 1;
         while(x % i == 0LL){
             Potencia *= i;
             x /= i;
@@ -90,11 +87,11 @@ long long Sigma(long long x){
     if(x > 1LL) r *= (x * x - 1LL) / (x - 1LL);
     return r;
 }
-long long Totiente(long long x){
-    long long r = 1;
-    for(long long i = 2; i * i <= x; i++){
+ll Totiente(ll x){
+    ll r = 1;
+    for(ll i = 2; i * i <= x; i++){
         if(x % i != 0LL) continue;
-        long long Potencia = 1;
+        ll Potencia = 1;
         while(x % i == 0LL){
             Potencia *= i;
             x /= i;
@@ -104,31 +101,31 @@ long long Totiente(long long x){
     if(x > 1LL) r *= x - 1LL;
     return r;
 }
-long long Reversi_n(long long x){
+ll Reversi_n(ll x){
     string s = to_string(x);
     reverse(s.begin(), s.end());
     return stoll(s);
 }
-long long Sumar_d_gitos(long long x){
+ll Sumar_d_gitos(ll x){
     string s = to_string(x);
-    long long Suma = 0;
+    ll Suma = 0;
     for(auto E: s) Suma += (ll)(E - 48);
     return Suma;
 }
-long long Sumar_d_gitos_pares(long long x){
+ll Sumar_d_gitos_pares(ll x){
     string s = to_string(x);
-    long long Suma = 0;
+    ll Suma = 0;
     for(auto E: s) if((E & 1) == 0) Suma += (ll)(E - 48);
     return Suma;
 }
-long long Sumar_d_gitos_impares(long long x){
+ll Sumar_d_gitos_impares(ll x){
     string s = to_string(x);
-    long long Suma = 0;
+    ll Suma = 0;
     for(auto E: s) if(E & 1) Suma += (ll)(E - 48);
     return Suma;
 }
-long long Entrada_entera(){
-    long long x;
+ll Entrada_entera(){
+    ll x;
     cout<<"Dé un número.\n";
     cin>>x;
     return x;
