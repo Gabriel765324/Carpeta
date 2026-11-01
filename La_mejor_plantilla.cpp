@@ -108,6 +108,7 @@
 #define techo ceil
 #define piso floor
 #define redondear round
+#define limpiar clear
 definir_tipo int entero;
 definir_tipo long long largo_largo;
 definir_tipo long int entero_largo;

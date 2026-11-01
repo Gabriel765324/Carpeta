@@ -101,6 +101,22 @@ ll Totiente(ll x){
     if(x > 1LL) r *= x - 1LL;
     return r;
 }
+ll Mu(ll x){
+    ll r = 1;
+    for(ll i = 2; i * i <= x; i++){
+        if(x % i != 0LL) continue;
+        bool Primero = 1;
+        while(x % i == 0LL){
+            if(Primero) Primero = 0;
+            else return 0LL;
+            x /= i;
+            r /= -1LL;
+        }
+        
+    }
+    if(x > 1LL) return -r;
+    return r;
+}
 ll Reversi_n(ll x){
     string s = to_string(x);
     reverse(s.begin(), s.end());
@@ -381,7 +397,30 @@ vll Ajuste_polinomial_entero(int n, vll a){
     }
     vll Secuencia;
     forn(i, n){
-        if(i == int(Ajuste[0].size())){
+        if(i >= int(Ajuste[0].size())){
+            Ajuste.back().pb(Ajuste.back().back());
+            for(int j = int(Ajuste.size()) - 2; j > -1; j--){
+                Ajuste[j].pb(Ajuste[j].back() + Ajuste[j + 1].back());
+            }
+        }
+        Secuencia.pb(Ajuste[0][i]);
+    }
+    return Secuencia;
+}
+vld Ajuste_polinomial_real(int n, vld a){
+    vector< vld > Ajuste;
+    Ajuste.pb(a);
+    while(1){
+        vld Nuevo;
+        forn(i, Ajuste.back().size() - 1){
+            Nuevo.pb(Ajuste.back()[i + 1] - Ajuste.back()[i]);
+        }
+        Ajuste.pb(Nuevo);
+        if(int(Nuevo.size()) == 1) break;
+    }
+    vld Secuencia;
+    forn(i, n){
+        if(i >= int(Ajuste[0].size())){
             Ajuste.back().pb(Ajuste.back().back());
             for(int j = int(Ajuste.size()) - 2; j > -1; j--){
                 Ajuste[j].pb(Ajuste[j].back() + Ajuste[j + 1].back());

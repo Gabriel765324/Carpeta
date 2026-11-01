@@ -24,6 +24,8 @@
 *.h
 !Librer_a.h
 *.lg4
+*.s
+*.asm
 *.circ
 Codeforces/Problemas/Genera casos.cpp
 Codeforces/Good bye 2024/D.cpp
